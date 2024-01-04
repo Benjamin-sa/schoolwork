@@ -8,9 +8,7 @@
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.inf1.flappybird2.BirdFXMLController">
    <children>
       <AnchorPane fx:id="paneel" layoutY="119.0" prefHeight="261.0" prefWidth="600.0">
-         <children>
-            <Circle fx:id="Vogel" fill="DODGERBLUE" layoutX="68.0" layoutY="119.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
-         </children></AnchorPane>
+         </AnchorPane>
       <Button fx:id="knop" layoutX="88.0" layoutY="41.0" mnemonicParsing="false" text="omhoogGaan" />
       <Label fx:id="highScore" layoutX="278.0" layoutY="45.0" text="geeftHighScore" />
       <Label fx:id="score" layoutX="278.0" layoutY="87.0" text="geeftScore" />

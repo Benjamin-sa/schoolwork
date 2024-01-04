@@ -4,8 +4,6 @@
  */
 package be.inf1.flappybird2.model;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -19,12 +17,15 @@ public class Pilaar {
 
         
         private Rectangle pilaar;
-        private boolean isVoorbij = false;
+        private boolean voorbijGevlogen = false;
         
 
         public Pilaar(Rectangle pilaar) {
         
             this.pilaar = pilaar;
+            pilaar.setTranslateX(150);
+
+            
 
             
         }
@@ -35,19 +36,19 @@ public class Pilaar {
             return pilaar;
         }
 
+        public boolean isVoorbijGevlogen() {
+            return voorbijGevlogen;
+        }
+
+        public void setVoorbijGevlogen(boolean voorbijGevlogen) {
+            this.voorbijGevlogen = voorbijGevlogen;
+        }
+
         public void setPilaar(Rectangle pilaar) {
             this.pilaar = pilaar;
         }
 
-        public boolean isVoorbij() {
-            return isVoorbij;
-        }
-
-        public void setIsVoorbij(boolean isVoorbij) {
-            this.isVoorbij = isVoorbij;
-        }
-
-        
+    
         
         public double getBreedte(){
             return pilaar.getWidth();   

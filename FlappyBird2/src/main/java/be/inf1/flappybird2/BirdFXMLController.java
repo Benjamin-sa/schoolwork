@@ -23,9 +23,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import be.inf1.flappybird2.view.ViewGame;
-import be.inf1.flappybird2.model.Bird;
 import be.inf1.flappybird2.model.Pilaar;
 import be.inf1.flappybird2.GameController;
+import be.inf1.flappybird2.model.Bird;
 import javafx.util.Duration;
 
 public class BirdFXMLController {
@@ -39,8 +39,7 @@ public class BirdFXMLController {
     @FXML
     private Label highScore;
 
-    @FXML
-    private Circle Vogel;
+    
 
     @FXML
     private Label highscoreLabel;
@@ -60,25 +59,36 @@ public class BirdFXMLController {
     @FXML
     private Button startKnop;
 
-    private Bird bird;
     private GameController gameController;
     private ViewGame view;
     public Timeline gameLoop;
     private Pilaar rectangle;
+    private Bird vogel;
+
+    public BirdFXMLController() {
+        System.out.println("in constructor" + vogel);
+    }
 
 
 
 
     @FXML
     void initialize() {
-        paneel.setStyle("-fx-background-color: #00FFFF;");
-        paneel.setPrefHeight(400);
+        
         view = new ViewGame(paneel, this);
+        System.out.println("Before initializing vogel: " + vogel);
+        vogel = new Bird(50, 100, 7, paneel);
+        System.out.println("After initializing vogel: " + vogel);
+        paneel.getChildren().add(vogel.getVogel());
+        paneel.setStyle("-fx-background-color: #00FFFF;");
         rectangle = new Pilaar(new Rectangle());
-        gameController = new GameController(view, paneel, getVogel(), this, rectangle );
+        gameController = new GameController(view,vogel,paneel, this, rectangle); 
+        
+
 
         Platform.runLater(() -> {
             view.tekenPilaren();
+            view.tekenBorders();
         });
         
 
@@ -87,6 +97,7 @@ public class BirdFXMLController {
             @Override
             public void handle(ActionEvent event) {
                 gameController.startGame();
+
                 paneel.requestFocus();
             }
         });
@@ -94,8 +105,14 @@ public class BirdFXMLController {
         paneel.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (gameController.isGameGestart() && event.getCode() == KeyCode.SPACE) {
-                    Vogel.setCenterY(Vogel.getCenterY() - 50);
+                if (event.getCode() == KeyCode.SPACE) {
+                    if (!gameController.isGameGestart()) {
+                        gameController.startGame();
+                    } else {
+                        System.out.println("In setOnKeyPressed block: " + vogel);
+                        vogel.setyCoord(vogel.getCenterumy() - 75);
+                    }
+                    paneel.requestFocus();
                 }
             }
         });
@@ -105,10 +122,7 @@ public class BirdFXMLController {
 
         
 
-public Circle getVogel() {
-    return Vogel;
 
-}
 
 public void updateScore(int score) {
     this.score.setText("score" + score);

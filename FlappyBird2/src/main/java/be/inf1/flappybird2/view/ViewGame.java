@@ -20,6 +20,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import be.inf1.flappybird2.model.Pilaar;
+import be.inf1.flappybird2.model.Bird;
 import be.inf1.flappybird2.BirdFXMLController;
 import be.inf1.flappybird2.model.Pilaar;
 import java.util.ArrayList;
@@ -38,7 +39,8 @@ public class ViewGame {
     private double openingHoogte = 100; // De hoogte van de opening tussen de pilaren
     private GraphicsContext gc;
     private List<Pilaar> pilaren = new ArrayList<>();
-    private Pilaar pilaar;
+    private Rectangle bovenGrens;
+    private Rectangle onderGrens;
     
 
 
@@ -60,6 +62,32 @@ public class ViewGame {
         this.pilaren = pilaren;
 
     }
+
+    public void tekenBorders() {
+        // Initialize bovenGrens and onderGrens
+    bovenGrens = new Rectangle(); // 10 is the thickness of the border
+    bovenGrens.heightProperty().set(10);
+    bovenGrens.widthProperty().bind(paneel.widthProperty());
+    bovenGrens.setFill(Color.RED); // The color of the border
+
+    onderGrens = new Rectangle();
+    onderGrens.yProperty().bind(paneel.heightProperty().subtract(10));
+    onderGrens.heightProperty().set(10);
+    onderGrens.widthProperty().bind(paneel.widthProperty());
+    onderGrens.setFill(Color.RED);
+
+    paneel.getChildren().addAll(bovenGrens, onderGrens);
+    }
+
+    public Rectangle getBovenGrens() {
+        return bovenGrens;
+    }
+
+    public Rectangle getOnderGrens() {
+        return onderGrens;
+    }
+
+
 
 
     public void tekenPilaren() {
@@ -87,14 +115,13 @@ public class ViewGame {
     
             pilaren.add(pilaar);
             pilaren.add(pilaar2);
+            paneel.getChildren().addAll(bovenPilaar, onderPilaar);
     
             // Verhoog Xpos voor de volgende pilaar
             Xpos += 200;
         }
     
-        for (Pilaar p : pilaren) {
-            paneel.getChildren().add(p.getPilaar());
-        }
+        
     
         
     }

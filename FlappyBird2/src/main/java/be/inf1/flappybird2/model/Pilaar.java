@@ -18,44 +18,58 @@ public class Pilaar {
     
 
         
-        private Rectangle rectangle;
-        private Rectangle boven;
-        private Rectangle onder;
-        public Pilaar(double breedte, double hoogte, double x, double y) {
-            this.rectangle = new Rectangle(breedte, hoogte, Color.GREEN);
-            this.rectangle.setX(x);
-            this.rectangle.setY(y);
-            this.boven = new Rectangle(breedte, hoogte, Color.GREEN);
-            this.boven.setX(x);
-            this.boven.setY(y);
-            this.onder = new Rectangle(breedte, hoogte, Color.GREEN);
-            this.onder.setX(x);
-            this.onder.setY(y);
-        }
-
-        public Rectangle getBoven() {
-            return boven;
-        }
-
-        public void setBoven(Rectangle boven) {
-            this.boven = boven;
-        }
-
-        public Rectangle getOnder() {
-            return onder;
-        }
-
-        public void setOnder(Rectangle onder) {
-            this.onder = onder;
-        }
-
-        public Rectangle getRectangle() {
-            return this.rectangle;
-        }
+        private Rectangle pilaar;
+        private boolean isVoorbij = false;
         
-        public void getBreedte(){
+
+        public Pilaar(Rectangle pilaar) {
+        
+            this.pilaar = pilaar;
+
             
         }
+
+        
+
+        public Rectangle getPilaar() {
+            return pilaar;
+        }
+
+        public void setPilaar(Rectangle pilaar) {
+            this.pilaar = pilaar;
+        }
+
+        public boolean isVoorbij() {
+            return isVoorbij;
+        }
+
+        public void setIsVoorbij(boolean isVoorbij) {
+            this.isVoorbij = isVoorbij;
+        }
+
+        
+        
+        public double getBreedte(){
+            return pilaar.getWidth();   
+        } 
+
+        public double getHoogte(){
+            return pilaar.getHeight();
+        }
+
+        
+
+        public double getx() {
+            return pilaar.getX();
+        }
+
+        public double gety() {
+            return pilaar.getY();
+        }
+
+         
+
+        
 
 
     

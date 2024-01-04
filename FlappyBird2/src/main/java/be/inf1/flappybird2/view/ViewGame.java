@@ -13,6 +13,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -32,92 +33,84 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 public class ViewGame {
-    private Pane paneel;
-    private double grensHoogte;
+    private AnchorPane paneel;
+    private BirdFXMLController BirdFXMLController;
     private double openingHoogte = 100; // De hoogte van de opening tussen de pilaren
-    private Canvas canvas;
     private GraphicsContext gc;
     private List<Pilaar> pilaren = new ArrayList<>();
+    private Pilaar pilaar;
+    
 
-    public ViewGame(Pane paneel) {
-        this.paneel = paneel;
+
+
+
+
+    public ViewGame(AnchorPane paneel, BirdFXMLController BirdFXMLController) {
+        this.BirdFXMLController = BirdFXMLController;
+        this.paneel = BirdFXMLController.getPaneel();
         this.pilaren = new ArrayList<>();
-
-        
+       
     }
 
     public List<Pilaar> getPilaren() {
         return pilaren;
     }
 
+    public void setPilaren(List<Pilaar> pilaren) {
+        this.pilaren = pilaren;
+
+    }
+
 
     public void tekenPilaren() {
-        int breedte = 20;
-        double Xpos = 100;
+        int breedte = 10;
+        double Xpos = 20;
     
         // Maak een nieuwe Random om de hoogte van de opening te bepalen
         Random rand = new Random();
     
         // Maak een loop om meerdere pilaren te maken
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 30; i++) {
             // Bereken de y-positie van de opening
-            double openingY = rand.nextDouble() * (paneel.getHeight() - openingHoogte);
-    
+            double openingY = Math.max(rand.nextDouble() * (paneel.getHeight() - openingHoogte), 50);    
             // Maak het bovenste deel van de pilaar
             Rectangle bovenPilaar = new Rectangle(Xpos, 0, breedte, openingY);
             bovenPilaar.setFill(Color.GREEN);
     
             // Maak het onderste deel van de pilaar
-            Rectangle onderPilaar = new Rectangle(Xpos, openingY + openingHoogte, breedte, paneel.getHeight() - openingY - openingHoogte);
+            double onderPilaarY = openingY + openingHoogte;
+            Rectangle onderPilaar = new Rectangle(Xpos, onderPilaarY, breedte, paneel.getHeight() - onderPilaarY);
             onderPilaar.setFill(Color.GREEN);
     
-            // Voeg de pilaren toe aan het paneel
-            paneel.getChildren().addAll(bovenPilaar, onderPilaar);
+            Pilaar pilaar = new Pilaar(bovenPilaar);
+            Pilaar pilaar2 = new Pilaar(onderPilaar);
     
-            // Voeg de pilaren toe aan de lijst
-            pilaren.add(new Pilaar(Xpos, openingY, breedte, openingHoogte));
+            pilaren.add(pilaar);
+            pilaren.add(pilaar2);
     
             // Verhoog Xpos voor de volgende pilaar
             Xpos += 200;
         }
+    
+        for (Pilaar p : pilaren) {
+            paneel.getChildren().add(p.getPilaar());
+        }
+    
+        
+    }
+
+
+    public void reset() {
+        pilaren.clear();
+
+        paneel.getChildren().removeIf(node -> node instanceof Rectangle && Color.GREEN.equals(((Rectangle) node).getFill()));
+
+        tekenPilaren();
     }
 
     
 
-        public void startPilaren() {
-    for (Pilaar pilaar : pilaren) {
-        // Create a TranslateTransition for the top pillar
-        TranslateTransition ttTop = new TranslateTransition(Duration.seconds(10), pilaar.getBoven());
-        ttTop.setByX(-200); // Move the pillar 200 pixels to the left
-        ttTop.setCycleCount(Animation.INDEFINITE); // Repeat the animation indefinitely
-
-        // Create a TranslateTransition for the bottom pillar
-        TranslateTransition ttBottom = new TranslateTransition(Duration.seconds(10), pilaar.getOnder());
-        ttBottom.setByX(-200); // Move the pillar 200 pixels to the left
-        ttBottom.setCycleCount(Animation.INDEFINITE); // Repeat the animation indefinitely
-
-        // Start the animations
-        ttTop.play();
-        ttBottom.play();
-    }
-
-    // Create a Timeline that checks if the pillars are out of sight every frame
-    Timeline checkPillars = new Timeline(new KeyFrame(Duration.seconds(20), e -> {
-        for (Pilaar pilaar : pilaren) {
-            // If the top pillar is completely out of sight, reset its x-position to the right side of the screen
-            if (pilaar.getBoven().getTranslateX() + pilaar.getBoven().getWidth() < 0) {
-                pilaar.getBoven().setTranslateX(paneel.getWidth());
-            }
-
-            // If the bottom pillar is completely out of sight, reset its x-position to the right side of the screen
-            if (pilaar.getOnder().getTranslateX() + pilaar.getOnder().getWidth() < 0) {
-                pilaar.getOnder().setTranslateX(paneel.getWidth());
-            }
-        }
-    }));
-    checkPillars.setCycleCount(Animation.INDEFINITE); // Repeat the Timeline indefinitely
-    checkPillars.play(); // Start the Timeline
-}}
+}
     
     
     

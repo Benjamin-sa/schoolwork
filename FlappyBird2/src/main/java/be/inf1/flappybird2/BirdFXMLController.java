@@ -65,8 +65,6 @@ public class BirdFXMLController {
     private ViewGame view;
     public Timeline gameLoop;
     private Pilaar rectangle;
-    private Rectangle boven;
-    private Rectangle onder;
 
 
 
@@ -74,9 +72,15 @@ public class BirdFXMLController {
     @FXML
     void initialize() {
         paneel.setStyle("-fx-background-color: #00FFFF;");
-        view = new ViewGame(paneel);
-        rectangle = new Pilaar(20, 100, 100, 100);
+        paneel.setPrefHeight(400);
+        view = new ViewGame(paneel, this);
+        rectangle = new Pilaar(new Rectangle());
         gameController = new GameController(view, paneel, getVogel(), this, rectangle );
+
+        Platform.runLater(() -> {
+            view.tekenPilaren();
+        });
+        
 
 
         startKnop.setOnAction(new EventHandler<ActionEvent>() {
@@ -90,7 +94,7 @@ public class BirdFXMLController {
         paneel.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.SPACE) {
+                if (gameController.isGameGestart() && event.getCode() == KeyCode.SPACE) {
                     Vogel.setCenterY(Vogel.getCenterY() - 50);
                 }
             }
@@ -103,6 +107,16 @@ public class BirdFXMLController {
 
 public Circle getVogel() {
     return Vogel;
+
+}
+
+public void updateScore(int score) {
+    this.score.setText("score" + score);
+    //System.out.println(score);
+}
+
+public AnchorPane getPaneel() {
+    return paneel;
         
 
 

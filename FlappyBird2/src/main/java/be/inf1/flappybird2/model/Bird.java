@@ -5,6 +5,12 @@
 package be.inf1.flappybird2.model;
 
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import be.inf1.flappybird2.view.ViewGame;
+import be.inf1.flappybird2.BirdFXMLController;
+import be.inf1.flappybird2.model.Pilaar;
+import java.util.List;
 
 /**
  *
@@ -16,14 +22,18 @@ public class Bird {
     private int dy;
     private Circle circle;
     private static final double zwaartekracht = 1.5;
+    private ViewGame viewGame;
+    private BirdFXMLController BirdFXMLController;
 
   
 
 
-    public Bird(int xCoord, int yCoord) {
+    public Bird(int xCoord, int yCoord, ViewGame viewGame, BirdFXMLController BirdFXMLController, Pilaar rectangle) {
         this.xCoordBird = xCoord;
         this.yCoordBird =yCoord;
         this.circle = new Circle();
+        this.viewGame = viewGame;
+        this.BirdFXMLController = BirdFXMLController;
     }
 
     /**
@@ -37,7 +47,7 @@ public class Bird {
         return 10;
     }
     
-    public void resetYcoord(){
+    public void reset(){
         this.yCoordBird=90;
     }
     
@@ -60,10 +70,11 @@ public class Bird {
 
     public void omLaagGaan() {
         circle.setCenterY(circle.getCenterY() - zwaartekracht);
-        System.out.println("omhooggaan");
 
 
-    }   
+    }
+    
+        
 
     
     

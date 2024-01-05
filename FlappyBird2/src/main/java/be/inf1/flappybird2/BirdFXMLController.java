@@ -66,7 +66,7 @@ public class BirdFXMLController {
     public Timeline gameLoop;
     private Pilaar rectangle;
     private Bird vogel;
-    private double Xpos = ;
+    private double Xpos = 200;
 
     public BirdFXMLController() {
         System.out.println("in constructor" + vogel);

@@ -8,8 +8,6 @@ import java.util.TimerTask;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.security.auth.x500.X500Principal;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -24,11 +22,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+
 import be.inf1.flappybird2.view.ViewGame;
 import be.inf1.flappybird2.model.Pilaar;
 import be.inf1.flappybird2.GameController;
 import be.inf1.flappybird2.model.Bird;
-import javafx.util.Duration;
 
 public class BirdFXMLController {
 
@@ -40,8 +39,6 @@ public class BirdFXMLController {
 
     @FXML
     private Label highScore;
-
-    
 
     @FXML
     private Label highscoreLabel;
@@ -69,43 +66,33 @@ public class BirdFXMLController {
     private double Xpos = 200;
 
     public BirdFXMLController() {
-        System.out.println("in constructor" + vogel);
     }
-
-
-
 
     @FXML
     void initialize() {
-        
+        paneel.setMinSize(800, 400);
+        paneel.setMaxSize(800, 600);
+        paneel.setPrefSize(800, 400);                   
         view = new ViewGame(paneel, this);
-        System.out.println("Before initializing vogel: " + vogel);
-        vogel = new Bird(50, 100, 7, paneel);
-        System.out.println("After initializing vogel: " + vogel);
-        paneel.getChildren().add(vogel.getVogel());
-        
+        view.tekenVogel();
         paneel.setStyle("-fx-background-color: #00FFFF;");
-        rectangle = new Pilaar(new Rectangle(), new Rectangle(), Xpos);
-        gameController = new GameController(view,vogel,paneel, this, rectangle); 
-        
-
+        gameController = new GameController(view, vogel, paneel, this, rectangle);
+        this.vogel = view.getVogel();
 
         new Timer().schedule(new TimerTask() {
-    @Override
-    public void run() {
-        Platform.runLater(() -> {
-            view.tekenPilaren();
-            view.tekenBorders();
-        });
-    }
-}, 500);  // Wacht 500 milliseconden voordat tekenPilaren wordt aangeroepen
-
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    view.tekenPilaren();
+                    view.tekenBorders();
+                });
+            }
+        },0 ); 
 
         startKnop.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 gameController.startGame();
-
                 paneel.requestFocus();
             }
         });
@@ -117,29 +104,21 @@ public class BirdFXMLController {
                     if (!gameController.isGameGestart()) {
                         gameController.startGame();
                     } else {
-                        System.out.println("In setOnKeyPressed block: " + vogel);
-                        vogel.setyCoord(vogel.getCenterumy() - 75);
+                        vogel.setyCoord(vogel.getCenterumy() - 50);
                     }
                     paneel.requestFocus();
                 }
             }
         });
-    
+
         paneel.setFocusTraversable(true);
     }
 
-        
+    public void updateScore(int score) {
+        this.score.setText("score" + score);
+    }
 
-
-
-public void updateScore(int score) {
-    this.score.setText("score" + score);
-    //System.out.println(score);
+    public AnchorPane getPaneel() {
+        return paneel;
+    }
 }
-
-public AnchorPane getPaneel() {
-    return paneel;
-        
-
-
-}}

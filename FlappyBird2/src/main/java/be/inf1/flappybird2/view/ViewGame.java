@@ -41,6 +41,7 @@ public class ViewGame {
     private List<Pilaar> pilaren = new ArrayList<>();
     private Rectangle bovenGrens;
     private Rectangle onderGrens;
+    private Bird vogel;
     
 
 
@@ -62,6 +63,19 @@ public class ViewGame {
         this.pilaren = pilaren;
 
     }
+
+    public Bird tekenVogel(){
+        vogel = new Bird(10, 50, 7, paneel);
+        paneel.getChildren().add(vogel.getVogel());
+        return vogel;
+    }
+
+
+    public Bird getVogel() {
+        return vogel;
+    }
+
+
 
     public void tekenBorders() {
         // Initialize bovenGrens and onderGrens
@@ -92,30 +106,22 @@ public class ViewGame {
 
     public void tekenPilaren() {
         int breedte = 10;
-        double Xpos = 200;  // Begin aan de rechterkant van het paneel
+        double Xpos = 200;
+        System.out.println(paneel.getWidth()); // Begin aan de rechterkant van het paneel
     
         // Maak een nieuwe Random om de hoogte van de opening te bepalen
         Random rand = new Random();
     
         // Maak een loop om meerdere pilaren te maken
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 10; i++) {
             // Bereken de y-positie van de opening
             double openingY = Math.max(rand.nextDouble() * (paneel.getHeight() - openingHoogte), 50);    
-            // Maak het bovenste deel van de pilaar
-            Rectangle bovenPilaar = new Rectangle(Xpos, 0, breedte, openingY);
-            bovenPilaar.setFill(Color.GREEN);
     
-            // Maak het onderste deel van de pilaar
-            double onderPilaarY = openingY + openingHoogte;
-            Rectangle onderPilaar = new Rectangle(Xpos, onderPilaarY, breedte, paneel.getHeight() - onderPilaarY);
-            onderPilaar.setFill(Color.GREEN);
-    
-            Pilaar pilaar = new Pilaar(bovenPilaar, onderPilaar, Xpos);
-            
+            Pilaar pilaar = new Pilaar(Xpos, openingY, openingHoogte, breedte, Color.GREEN, paneel);
     
             pilaren.add(pilaar);
-            
-            paneel.getChildren().addAll(bovenPilaar, onderPilaar);
+    
+            paneel.getChildren().addAll(pilaar.getBovenPilaar(), pilaar.getOnderPilaar());
     
             // Verhoog Xpos voor de volgende pilaar
             Xpos += 200;
@@ -124,11 +130,13 @@ public class ViewGame {
 
 
     public void reset() {
+        // Verwijder de oude pilaren
         pilaren.clear();
-
         paneel.getChildren().removeIf(node -> node instanceof Rectangle && Color.GREEN.equals(((Rectangle) node).getFill()));
-
+    
+        // Teken de nieuwe pilaren
         tekenPilaren();
+        
     }
 
     

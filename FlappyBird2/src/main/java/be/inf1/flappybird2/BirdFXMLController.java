@@ -3,6 +3,8 @@ package be.inf1.flappybird2;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,6 +66,7 @@ public class BirdFXMLController {
     public Timeline gameLoop;
     private Pilaar rectangle;
     private Bird vogel;
+    private double Xpos = ;
 
     public BirdFXMLController() {
         System.out.println("in constructor" + vogel);
@@ -80,17 +83,22 @@ public class BirdFXMLController {
         vogel = new Bird(50, 100, 7, paneel);
         System.out.println("After initializing vogel: " + vogel);
         paneel.getChildren().add(vogel.getVogel());
+        
         paneel.setStyle("-fx-background-color: #00FFFF;");
-        rectangle = new Pilaar(new Rectangle());
+        rectangle = new Pilaar(new Rectangle(), new Rectangle(), Xpos);
         gameController = new GameController(view,vogel,paneel, this, rectangle); 
         
 
 
+        new Timer().schedule(new TimerTask() {
+    @Override
+    public void run() {
         Platform.runLater(() -> {
             view.tekenPilaren();
             view.tekenBorders();
         });
-        
+    }
+}, 500);  // Wacht 500 milliseconden voordat tekenPilaren wordt aangeroepen
 
 
         startKnop.setOnAction(new EventHandler<ActionEvent>() {

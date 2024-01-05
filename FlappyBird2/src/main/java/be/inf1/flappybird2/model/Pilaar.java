@@ -18,12 +18,19 @@ public class Pilaar {
         
         private Rectangle pilaar;
         private boolean voorbijGevlogen = false;
+        Rectangle bovenPilaar;
+        Rectangle onderPilaar;
+        private double x;
         
 
-        public Pilaar(Rectangle pilaar) {
+        public Pilaar(Rectangle bovenPilaar, Rectangle onderPilaar, double x) {
         
-            this.pilaar = pilaar;
-            pilaar.setTranslateX(150);
+            this.bovenPilaar = bovenPilaar;
+            this.onderPilaar = onderPilaar;
+            this.x = x;
+            this.pilaar = new Rectangle(x, 0, bovenPilaar.getWidth(), onderPilaar.getHeight() + bovenPilaar.getHeight());
+            pilaar.setTranslateX(x);
+
 
             
 
@@ -32,8 +39,12 @@ public class Pilaar {
 
         
 
-        public Rectangle getPilaar() {
-            return pilaar;
+        public Rectangle getBovenPilaar() {
+            return bovenPilaar;
+        }
+
+        public Rectangle getOnderPilaar() {
+            return onderPilaar;
         }
 
         public boolean isVoorbijGevlogen() {
@@ -60,13 +71,19 @@ public class Pilaar {
 
         
 
-        public double getx() {
-            return pilaar.getX();
+        public double getX() {
+            return this.x;
         }
 
-        public double gety() {
-            return pilaar.getY();
+        public void setX(double x) {
+            this.x = x;
+        
+            // Update de x-waarde van de Rectangle objecten
+            this.bovenPilaar.setX(x);
+            this.onderPilaar.setX(x);
         }
+
+        
 
          
 

@@ -92,7 +92,7 @@ public class ViewGame {
 
     public void tekenPilaren() {
         int breedte = 10;
-        double Xpos = 20;
+        double Xpos = 200;  // Begin aan de rechterkant van het paneel
     
         // Maak een nieuwe Random om de hoogte van de opening te bepalen
         Random rand = new Random();
@@ -110,20 +110,16 @@ public class ViewGame {
             Rectangle onderPilaar = new Rectangle(Xpos, onderPilaarY, breedte, paneel.getHeight() - onderPilaarY);
             onderPilaar.setFill(Color.GREEN);
     
-            Pilaar pilaar = new Pilaar(bovenPilaar);
-            Pilaar pilaar2 = new Pilaar(onderPilaar);
+            Pilaar pilaar = new Pilaar(bovenPilaar, onderPilaar, Xpos);
+            
     
             pilaren.add(pilaar);
-            pilaren.add(pilaar2);
+            
             paneel.getChildren().addAll(bovenPilaar, onderPilaar);
     
             // Verhoog Xpos voor de volgende pilaar
             Xpos += 200;
         }
-    
-        
-    
-        
     }
 
 

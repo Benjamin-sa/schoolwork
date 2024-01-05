@@ -1,6 +1,7 @@
 
 package be.inf1.flappybird2;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -32,6 +35,7 @@ public class GameController {
     private int hvlpilaar = 0;
     private Bird bird;
     private long startTijd;
+    private int aantalPilarenVoorbij = 0;
 
 
     public GameController(ViewGame viewGame, Bird bird, AnchorPane paneel, BirdFXMLController BirdFXMLController, Pilaar rectangle) {
@@ -54,7 +58,8 @@ public class GameController {
         
         // Start de game loop
         gameLoop = new Timeline(new KeyFrame(Duration.seconds(0.017), e ->{
-            updateScore();
+            updatePilaren();
+            checkPassedPillar();
             bird.setyCoord(bird.getCenterumy() + 1);
             
             beweegPilaren();
@@ -72,6 +77,19 @@ public class GameController {
     
         paneel.requestFocus();
     }
+
+
+    public void updatePilaren() {
+        for (Pilaar pilaar : viewGame.getPilaren()) {
+            // Verminder de x-positie van de pilaar
+            double newX = pilaar.getX() - 1;
+            pilaar.setX(newX);
+    
+            // Update de positie van de bovenste en onderste rechthoeken
+            pilaar.getBovenPilaar().setX(newX);
+            pilaar.getOnderPilaar().setX(newX);
+        }
+    }
     
 
     public boolean checkBotsingen() {
@@ -81,40 +99,58 @@ public class GameController {
         // Controleer of de vogel de boven- of onderkant van het scherm raakt
         if (bird.getVogel().getBoundsInParent().intersects(bovenGrens.getBoundsInParent()) ||
         bird.getVogel().getBoundsInParent().intersects(onderGrens.getBoundsInParent())) {
-            restartGame(); 
+            gameOverScherm();
+            
             return true;      
     }
 
     for (Pilaar pilaar : viewGame.getPilaren()) {
-
-        if (bird.getVogel().getBoundsInParent().intersects(pilaar.getPilaar().getBoundsInParent())) {
-            restartGame();  
+        // Controleer of de vogel in aanraking komt met de bovenste of onderste pilaar
+        if (bird.getVogel().getBoundsInParent().intersects(pilaar.getBovenPilaar().getBoundsInParent()) ||
+            bird.getVogel().getBoundsInParent().intersects(pilaar.getOnderPilaar().getBoundsInParent())) {
+            
+            gameOverScherm();
             return true;
         }
     }
-    return false;}
+     return false;
+}
+
+private void gameOverScherm() {
+    try {
+        AnchorPane gameOverScherm = FXMLLoader.load(getClass().getResource("GameOver.fxml"));
+        paneel.getChildren().setAll(gameOverScherm);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+
+
+
+    private int currentPilaarIndex = 0;
+
+public void checkPassedPillar() {
+    if (currentPilaarIndex < viewGame.getPilaren().size()) {
+        Pilaar pilaar = viewGame.getPilaren().get(currentPilaarIndex);
+        
+        // Controleer of de pilaar volledig uit het zicht is verdwenen aan de linkerkant van het scherm
+        if (pilaar.getX() < bird.getCenterumx() && !pilaar.isVoorbijGevlogen()) {
+            pilaar.setVoorbijGevlogen(true);  // Markeer de pilaar als gepasseerd
+            updateScore();  // Update de score
+
+            // Ga naar de volgende pilaar
+            currentPilaarIndex++;
+        }
+    }
+}
 
 
 
     public void updateScore() {
-        double afstandTussenPilaren = 250;  // De afstand tussen de pilaren
-        double pilaarSnelheid = 1;  // De snelheid waarmee de pilaren naar links bewegen
-        double beginAfstand = 225;
-        long verstrekenTijd = System.currentTimeMillis() - startTijd;
-    
-        // Bereken het aantal pilaren dat de vogel zou moeten hebben gepasseerd
-        
-    double totaleAfstand = (verstrekenTijd / 10) * pilaarSnelheid + beginAfstand;
-    int verwachteGepasseerdePilaren = (int) (totaleAfstand / afstandTussenPilaren);
-    
-        System.out.println("Score: " + score);
-        System.out.println("Verwachte gepasseerde pilaren: " + verwachteGepasseerdePilaren);
-    
-        if (score < verwachteGepasseerdePilaren) {
-            score = verwachteGepasseerdePilaren;
-            System.out.println("Score: " + score);
-             BirdFXMLController.updateScore(score);
-        }
+        score++;
+    System.out.println("Score: " + score);
+    BirdFXMLController.updateScore(score);
             
     }
 
@@ -136,9 +172,12 @@ public class GameController {
 
     public void beweegPilaren() {
         List<Pilaar> pilaren = viewGame.getPilaren();
-
+    
         for (Pilaar pilaar : pilaren) {
-            pilaar.getPilaar().setTranslateX(pilaar.getPilaar().getTranslateX() - 2); 
+            // Beweeg de bovenste pilaar
+            pilaar.getBovenPilaar().setTranslateX(pilaar.getBovenPilaar().getTranslateX() - 2);
+            // Beweeg de onderste pilaar
+            pilaar.getOnderPilaar().setTranslateX(pilaar.getOnderPilaar().getTranslateX() - 2);
         }
     }
 

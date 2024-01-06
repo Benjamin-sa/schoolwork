@@ -122,18 +122,38 @@ public class GameController {
 
     }
 
-    public void beweegPilaren() {
-        List<Pilaar> pilaren = viewGame.getPilaren();
-    
-        for (Pilaar pilaar : pilaren) {
-            // Beweeg de bovenste pilaar
-            pilaar.getBovenPilaar().setTranslateX(pilaar.getBovenPilaar().getTranslateX() - 2);
-            // Beweeg de onderste pilaar
-            pilaar.getOnderPilaar().setTranslateX(pilaar.getOnderPilaar().getTranslateX() - 2);
+    private int volgendePilaarIndex = 0;
+
+public void beweegPilaren() {
+    List<Pilaar> pilaren = viewGame.getPilaren();
+    double schermBreedte = paneel.getWidth(); // Verkrijg de breedte van het scherm
+
+    for (int i = 0; i < pilaren.size(); i++) {
+        Pilaar pilaar = pilaren.get(i);
+
+        // Beweeg de bovenste pilaar
+        pilaar.getBovenPilaar().setTranslateX(pilaar.getBovenPilaar().getTranslateX() - 2);
+        // Beweeg de onderste pilaar
+        pilaar.getOnderPilaar().setTranslateX(pilaar.getOnderPilaar().getTranslateX() - 2);
+
+        // Controleer of de pilaar aan de rechterkant van het scherm is verdwenen
+        if (pilaar.getBovenPilaar().getTranslateX() < -paneel.getWidth()) {
+            // Controleer of dit de volgende pilaar is die moet worden gereset
+            if (i == volgendePilaarIndex) {
+                // Reset de positie van de pilaar naar de rechterkant van het scherm
+                pilaar.getBovenPilaar().setTranslateX(schermBreedte);
+                pilaar.getOnderPilaar().setTranslateX(schermBreedte);
+
+                // Verhoog de index van de volgende pilaar die moet worden gereset
+                volgendePilaarIndex++;
+                System.out.println("volgendePilaarIndex: " + volgendePilaarIndex);
+                if (volgendePilaarIndex >= pilaren.size()) {
+                    volgendePilaarIndex = 0;
+                }
+            }
         }
-            
-        
     }
+}
 
     public boolean isGameGestart() {
         return gameGestart;

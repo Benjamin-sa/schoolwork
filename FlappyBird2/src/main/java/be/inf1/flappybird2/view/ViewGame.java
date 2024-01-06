@@ -70,7 +70,7 @@ public class ViewGame  {
     }
 
     public Bird tekenVogel(){
-        vogel = new Bird(10, 50, 7, paneel);
+        vogel = new Bird(10, 125, 7, paneel);
         paneel.getChildren().add(vogel.getVogel());
         return vogel;
     }
@@ -137,7 +137,7 @@ public class ViewGame  {
 
 
     public void updateScore() {
-        highScore.setText("Score: " + score);
+        highScore.setText("Score: " + score); 
     }
 
 

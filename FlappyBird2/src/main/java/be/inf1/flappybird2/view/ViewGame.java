@@ -120,7 +120,7 @@ public class ViewGame  {
         Random rand = new Random();
     
         // Maak een loop om meerdere pilaren te maken
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             // Bereken de y-positie van de opening
             double openingY = Math.max(rand.nextDouble() * (paneel.getHeight() - openingHoogte), 50);    
     

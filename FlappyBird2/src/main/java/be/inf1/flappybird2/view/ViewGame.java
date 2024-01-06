@@ -13,6 +13,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -33,11 +34,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-public class ViewGame {
+
+
+
+public class ViewGame  {
     private AnchorPane paneel;
+    private Label highScore;
+    private double score = 0;
     private BirdFXMLController BirdFXMLController;
     private double openingHoogte = 100; // De hoogte van de opening tussen de pilaren
-    private GraphicsContext gc;
     private List<Pilaar> pilaren = new ArrayList<>();
     private Rectangle bovenGrens;
     private Rectangle onderGrens;
@@ -48,7 +53,7 @@ public class ViewGame {
 
 
 
-    public ViewGame(AnchorPane paneel, BirdFXMLController BirdFXMLController) {
+    public ViewGame(AnchorPane paneel, BirdFXMLController BirdFXMLController, Label highScore) {
         this.BirdFXMLController = BirdFXMLController;
         this.paneel = BirdFXMLController.getPaneel();
         this.pilaren = new ArrayList<>();
@@ -77,20 +82,22 @@ public class ViewGame {
 
 
 
+    
+
     public void tekenBorders() {
-        // Initialize bovenGrens and onderGrens
-    bovenGrens = new Rectangle(); // 10 is the thickness of the border
-    bovenGrens.heightProperty().set(10);
-    bovenGrens.widthProperty().bind(paneel.widthProperty());
-    bovenGrens.setFill(Color.RED); // The color of the border
+        // Initialiseer bovenGrens en onderGrens
+        bovenGrens = new Rectangle(); // 10 is de dikte van de rand
+        bovenGrens.heightProperty().set(10);
+        bovenGrens.widthProperty().bind(paneel.widthProperty());
+        bovenGrens.setFill(Color.RED); // De kleur van de rand
 
-    onderGrens = new Rectangle();
-    onderGrens.yProperty().bind(paneel.heightProperty().subtract(10));
-    onderGrens.heightProperty().set(10);
-    onderGrens.widthProperty().bind(paneel.widthProperty());
-    onderGrens.setFill(Color.RED);
+        onderGrens = new Rectangle();
+        onderGrens.yProperty().bind(paneel.heightProperty().subtract(10));
+        onderGrens.heightProperty().set(10);
+        onderGrens.widthProperty().bind(paneel.widthProperty());
+        onderGrens.setFill(Color.RED);
 
-    paneel.getChildren().addAll(bovenGrens, onderGrens);
+        paneel.getChildren().addAll(bovenGrens, onderGrens);
     }
 
     public Rectangle getBovenGrens() {
@@ -126,6 +133,11 @@ public class ViewGame {
             // Verhoog Xpos voor de volgende pilaar
             Xpos += 200;
         }
+    }
+
+
+    public void updateScore() {
+        highScore.setText("Score: " + score);
     }
 
 

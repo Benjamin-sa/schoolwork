@@ -73,10 +73,10 @@ public class BirdFXMLController {
         paneel.setMinSize(800, 400);
         paneel.setMaxSize(800, 600);
         paneel.setPrefSize(800, 400);                   
-        view = new ViewGame(paneel, this);
+        view = new ViewGame(paneel, this, highScore);
         view.tekenVogel();
         paneel.setStyle("-fx-background-color: #00FFFF;");
-        gameController = new GameController(view, vogel, paneel, this, rectangle);
+        gameController = new GameController(view, vogel, paneel, rectangle);
         this.vogel = view.getVogel();
 
         new Timer().schedule(new TimerTask() {
@@ -114,9 +114,6 @@ public class BirdFXMLController {
         paneel.setFocusTraversable(true);
     }
 
-    public void updateScore(int score) {
-        this.score.setText("score" + score);
-    }
 
     public AnchorPane getPaneel() {
         return paneel;

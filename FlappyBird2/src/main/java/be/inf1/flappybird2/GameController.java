@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import be.inf1.flappybird2.view.ViewGame;
-import be.inf1.flappybird2.BirdFXMLController;
 import be.inf1.flappybird2.model.Pilaar;
 import be.inf1.flappybird2.model.Bird;
 import javafx.animation.Animation;
@@ -34,10 +33,9 @@ public class GameController {
     private Bird bird;
     private long startTijd;
 
-    public GameController(ViewGame viewGame, Bird bird, AnchorPane paneel, BirdFXMLController BirdFXMLController,
+    public GameController(ViewGame viewGame, Bird bird, AnchorPane paneel, 
             Pilaar rectangle) {
         this.viewGame = viewGame;
-        this.BirdFXMLController = BirdFXMLController;
         this.pilaar = rectangle;
         this.paneel = paneel;
         this.bird = viewGame.getVogel();
@@ -56,7 +54,7 @@ public class GameController {
         gameLoop = new Timeline(new KeyFrame(Duration.seconds(0.017), e -> {
             // vogel begint met zakken 
             bird.setyCoord(bird.getCenterumy() + 2);
-
+            scoreBereken();
             beweegPilaren();
             gameGestart = true;
 
@@ -72,6 +70,17 @@ public class GameController {
         paneel.requestFocus();
     }
 
+
+
+    public void scoreBereken(){
+        for (Pilaar pilaar : viewGame.getPilaren()){
+            int nieuweScore = (int) Math.abs(pilaar.getBovenPilaar().getTranslateX() / 200);
+            if (nieuweScore > score){
+                score = nieuweScore;
+                updateScore();
+            }
+        }
+    }
     
 
     public boolean checkBotsingen() {
@@ -103,13 +112,11 @@ public class GameController {
     public void updateScore() {
         score++;
         System.out.println("Score: " + score);
-        BirdFXMLController.updateScore(score);
 
     }
 
     public void restartGame() {
         score = 0;
-        BirdFXMLController.updateScore(score);
         viewGame.reset();
         bird.resetVogel();
 

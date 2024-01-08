@@ -1,66 +1,47 @@
 package be.inf1.flappybird2.model;
 
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import be.inf1.flappybird2.view.ViewGame;
 
 public class Bird {
-    private Circle vogel;
-    private double xCoord;
-    private double yCoord;
-    private double xEen;
-    private double yEen;
-    private AnchorPane paneel;
+    
+
+
+
     private double snelheid = 0;
     private double zwaartekracht = 0.2;
+    private double x = 100;
+    private double y = 10;
+    private double radius = 10;
 
-    public Bird(double x, double y, double radius, AnchorPane paneel) {
-        this.vogel = new Circle(x, y, radius);
-        this.vogel.setCenterX(x);
-        this.vogel.setCenterY(y);
-        this.xCoord = x;
-        this.yCoord = y;
-        this.xEen = x;
-        this.yEen = y;
-    
-        this.paneel = paneel;
-        
+    public Bird() {
     }
 
     public double getxCoord() {
-        return xCoord;
+        return x;
     }
 
     public void setxCoord(double x) {
-        this.xCoord = x;
-        this.vogel.setCenterX(x);
+        this.x = x;
     }
 
     public double getyCoord() {
-        return yCoord;
+        return y;
     }
 
     public void setyCoord(double y) {
-        this.yCoord = y;
-        this.vogel.setCenterY(y);
+        this.y = y;
     }
 
-    public double getCenterumx() {
-        return vogel.getCenterX();
+    public Color getKleur() {
+        return Color.RED;
     }
 
-    public double getCenterumy() {
-        return vogel.getCenterY();
+    public double getRadius() {
+        return radius;
     }
 
-    public Circle getVogel() {
-        return vogel;
-    }
-
-    public void resetVogel(){
-        this.vogel.setCenterX(xEen);
-        this.vogel.setCenterY(yEen);
-    }
 
     public void update() {
         snelheid += zwaartekracht;
@@ -70,5 +51,6 @@ public class Bird {
     public void flap() {
         snelheid = -5;
     }
+
 }
 

@@ -8,8 +8,9 @@ import be.inf1.flappybird2.BirdFXMLController;
 
 public class Grenzen {
 
-    private double x, y, breedte, hoogte;
+    private double x, y;
     private Color kleur = Color.RED; // De kleur van de grenzen
+    private double hoogte = 10;
 
     public Grenzen() {
     }
@@ -28,14 +29,6 @@ public class Grenzen {
 
     public void setY(double y) {
         this.y = y;
-    }
-
-    public double getBreedte() {
-        return breedte;
-    }
-
-    public void setBreedte(double breedte) {
-        this.breedte = breedte;
     }
 
     public double getHoogte() {

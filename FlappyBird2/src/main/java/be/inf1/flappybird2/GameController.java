@@ -27,7 +27,8 @@ public class GameController {
     private BirdFXMLController view;
     private boolean gameGestart = false;
     private int score = 0;
-    private AnimationTimer gameLoop;
+    // private AnimationTimer gameLoop;
+    private Timeline movePilaren;
 
     public GameController(BirdFXMLController view, Bird birdModel, Grenzen grenzenModel, List<Pilaar> pilaarModels) {
         this.view = view;
@@ -35,40 +36,58 @@ public class GameController {
         this.grenzen = grenzenModel;
         this.pilaren = pilaarModels;
 
-        this.gameLoop = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                if (gameGestart) {
-                        updateGame();
-
-                    
-                }
-            } 
-        };
-}
-
-    public void startGame() {
-        gameGestart = true;
-        gameLoop.start();
-    }
-
-    public void stopGame() {
-        gameGestart = false;
-        gameLoop.stop();
-    }
-
-    private void updateGame() {
-
         double paneelHoogte = view.getPaneelHoogte();
         double paneelbreedte = view.getPaneelBreedte();
-        
-        bird.update();
         for (Pilaar pilaar : pilaren) {
             pilaar.update(paneelHoogte, paneelbreedte);
     
             
 
         }
+
+        // this.gameLoop = new AnimationTimer() {
+        //     @Override
+        //     public void handle(long now) {
+        //         if (gameGestart) {
+        //                 updateGame();
+
+                    
+        //         }
+        //     } 
+        // };
+
+
+         this.movePilaren = new Timeline(
+    new KeyFrame(Duration.seconds(0), event -> {
+        updateGame();
+        view.tekenPilaren();
+    }),
+    new KeyFrame(Duration.seconds(0.017)) // update elke 17 milliseconden, ongeveer 60 FPS
+);
+
+movePilaren.setCycleCount(Timeline.INDEFINITE);
+
+
+
+
+}
+
+    public void startGame() {
+        gameGestart = true;
+        movePilaren.play();
+    }
+
+    public void stopGame() {
+        gameGestart = false;
+        movePilaren.stop();
+    }
+
+    private void updateGame() {
+
+        
+        
+        bird.update();
+        
         view.tekenVogel();
         view.tekenPilaren();
     }

@@ -3,6 +3,7 @@ package be.inf1.flappybird2;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -21,12 +23,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import be.inf1.flappybird2.model.Pilaar;
-import be.inf1.flappybird2.GameController;
+import be.inf1.flappybird2.view.Controller;
 import be.inf1.flappybird2.model.Bird;
 import be.inf1.flappybird2.model.Grenzen;
 
@@ -59,68 +62,65 @@ public class BirdFXMLController {
     @FXML
     private Button startKnop;
 
-    private GameController gameController;
+    private Controller gameController;
     private Grenzen grenzen;
     public Timeline gameLoop;
-    private double schermBreedte;
     private Circle vogel;
-    private Rectangle bovenGrens, onderGrens;
     private Bird birdModel;
     List<Pilaar> pilaarModels = new ArrayList<>();
-    List<Rectangle> pilaarBoven = new ArrayList<>();
-    List<Rectangle> pilaarOnder = new ArrayList<>();    private Grenzen grenzenModel;
-
+    private Grenzen grenzenModel;
 
     public BirdFXMLController() {
-       
+
     }
 
     @FXML
     void initialize() {
 
-
-        
-        for (int i = 0; i < 5; i++) {
-            Pilaar pilaarModel = new Pilaar();
-            pilaarModels.add(pilaarModel);
-            Rectangle pilaarBovenRect = new Rectangle();
-            Rectangle pilaarOnderRect = new Rectangle();
-            pilaarBoven.add(pilaarBovenRect);
-            pilaarOnder.add(pilaarOnderRect);
-            paneel.getChildren().addAll(pilaarBovenRect, pilaarOnderRect);
-        }
-
-        birdModel = new Bird();
-        grenzenModel = new Grenzen();
-        bovenGrens = new Rectangle();
-        onderGrens = new Rectangle();
-        vogel = new Circle();
-
-        paneel.getChildren().addAll(vogel, bovenGrens, onderGrens);
-        System.out.println(paneel.getChildren().size());
-        gameController = new GameController(this, birdModel, grenzenModel, pilaarModels);
-        
-
-
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+        pause.setOnFinished(event -> {
+            for (int i = 1; i < 20; i++) {
+                double x = i * 200;
+                Pilaar pilaar = new Pilaar(x, 100, 30, paneel.getHeight(), Color.GREEN);
+                pilaarModels.add(pilaar);
+                Rectangle bovenPilaar = pilaar.getBovenPilaar();
+                Rectangle onderPilaar = pilaar.getOnderPilaar();
+                paneel.getChildren().addAll(bovenPilaar, onderPilaar);
+            }
+            // vogel initailiseren
+            birdModel = new Bird(100, 100, 10, Color.RED);
+            // grenzen initialiseren
+            grenzenModel = new Grenzen(0, 0, paneel.getWidth(), paneel.getHeight(), Color.RED, 10);
+            // gameController initialiseren
+            gameController = new Controller(this, birdModel, grenzenModel, pilaarModels);
+            Rectangle bovenGrens = grenzenModel.getBovenGrens();
+            Rectangle onderGrens = grenzenModel.getOnderGrens();
+            Circle vogel = birdModel.getVogel();
+            paneel.getChildren().addAll(bovenGrens, onderGrens, vogel);
+        });
+        pause.play();
 
         startKnop.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (!gameController.isGameGestart()) {
                     gameController.startGame();
-                    
-
-
+                    System.out.println("Game gestart");
                 }
                 paneel.requestFocus();
             }
         });
+    
 
         paneel.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.SPACE) {
-                        birdModel.flap();
+                    if(!gameController.isGameGestart()) {
+                        gameController.startGame();
+
+                    }
+                    gameController.flap();
                     paneel.requestFocus();
                 }
             }
@@ -129,67 +129,30 @@ public class BirdFXMLController {
         paneel.setFocusTraversable(true);
     }
 
-    public void tekenVogel(){
-        vogel.setCenterX(birdModel.getxCoord());
-        vogel.setCenterY(birdModel.getyCoord());
-        vogel.setRadius(birdModel.getRadius());
-        vogel.setFill(birdModel.getKleur());    
-    }
-
-    public void tekenPilaren(){
-        double paneelHoogte = paneel.getHeight();
-        double paneelBreedte = paneel.getWidth();
-        double afstand = 200; // afstand tussen de pilaren
-    
-        for (int i = 0; i < pilaarModels.size(); i++) {
-            Pilaar pilaarModel = pilaarModels.get(i);
-            Rectangle pilaarBovenRect = pilaarBoven.get(i);
-            Rectangle pilaarOnderRect = pilaarOnder.get(i);
-    
-            double x = i * afstand + paneelBreedte;
-            pilaarModel.setX(x);
-    
-            pilaarBovenRect.setX(pilaarModel.getX());
-            System.out.println(pilaarModel.getX());
-            pilaarBovenRect.setY(0);
-            pilaarBovenRect.setWidth(10); // breedte van de pilaar
-            pilaarBovenRect.setHeight(paneelHoogte - pilaarModel.getYBoven() - pilaarModel.getOpening()); // hoogte van de bovenste pilaar
-    
-            pilaarOnderRect.setX(pilaarModel.getX());
-            pilaarOnderRect.setY(pilaarModel.getYBoven() + pilaarModel.getOpening()); // y-positie van de onderste pilaar
-            pilaarOnderRect.setWidth(10); // breedte van de pilaar
-            pilaarOnderRect.setHeight(paneelHoogte - pilaarModel.getYBoven() - pilaarModel.getOpening()); // hoogte van de onderste pilaar
-    
-            pilaarBovenRect.setFill(pilaarModel.getKleur());
-            pilaarOnderRect.setFill(pilaarModel.getKleur());
-        }
-    }
 
 
-    public void tekenGrenzen(){
-        bovenGrens.setX(grenzenModel.getX());
-        bovenGrens.setY(grenzenModel.getY());
-        bovenGrens.setWidth(grenzenModel.getBreedte());
-        bovenGrens.setHeight(grenzenModel.getHoogte());
-        bovenGrens.setFill(grenzenModel.getKleur());
-
-        onderGrens.setX(grenzenModel.getX());
-        onderGrens.setY(paneel.getHeight() - grenzenModel.getY());
-        onderGrens.setWidth(grenzenModel.getBreedte());
-        onderGrens.setHeight(grenzenModel.getHoogte());
-        onderGrens.setFill(grenzenModel.getKleur());
-
-    }
+    public void resetPaneel(){
         
+        // pilaarModels.clear();
+        // paneel.getChildren().clear();
+        // Circle vogel = birdModel.getVogel();
+        // Rectangle bovenGrens = grenzenModel.getBovenGrens();
+        // Rectangle onderGrens = grenzenModel.getOnderGrens();
+        // paneel.getChildren().addAll(bovenGrens, onderGrens, vogel);
+
+        for (int i = 1; i < 20; i++) {
+                double x = i * 200;
+                Pilaar pilaar = new Pilaar(x, 100, 30, paneel.getHeight(), Color.GREEN);
+                pilaarModels.add(pilaar);
+                Rectangle bovenPilaar = pilaar.getBovenPilaar();
+                Rectangle onderPilaar = pilaar.getOnderPilaar();
+                paneel.getChildren().addAll(bovenPilaar, onderPilaar);
+            }
 
 
-    public double getPaneelBreedte() {
-        return paneel.getWidth();
+
     }
 
-    public double getPaneelHoogte() {
-        return paneel.getHeight();
-    }
     
 
 }

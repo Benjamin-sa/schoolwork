@@ -32,6 +32,9 @@ public class GameController {
     private Timeline gameLoop;
     private boolean gameGestart = false;
     private int score = 0;
+    private double snelheid = 0;
+    private double zwaartekracht = 0.2;
+    private double vliegImpuls = -15;
     private Bird bird;
     private long startTijd;
 
@@ -54,10 +57,9 @@ public class GameController {
 
         // Start de game loop
         gameLoop = new Timeline(new KeyFrame(Duration.seconds(0.017), e -> {
-            // vogel begint met zakken 
-            bird.setyCoord(bird.getCenterumy() + 2);
             scoreBereken();
             beweegPilaren();
+            gameUpdate();
             gameGestart = true;
 
             if (checkBotsingen()) {
@@ -153,6 +155,16 @@ public void beweegPilaren() {
         }
     }
 }
+
+public void gameUpdate() {
+    snelheid += zwaartekracht;
+    bird.setyCoord(bird.getCenterumy() + snelheid);
+}
+
+
+    public void flap() {
+        bird.setyCoord(bird.getCenterumy() - 50);
+    }
 
     public boolean isGameGestart() {
         return gameGestart;

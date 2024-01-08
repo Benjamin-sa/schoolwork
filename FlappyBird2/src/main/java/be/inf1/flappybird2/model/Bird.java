@@ -11,6 +11,7 @@ public class Bird {
     private double xEen;
     private double yEen;
     private AnchorPane paneel;
+    private double snelheid = 0;
 
     public Bird(double x, double y, double radius, AnchorPane paneel) {
         this.vogel = new Circle(x, y, radius);

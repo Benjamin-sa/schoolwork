@@ -104,7 +104,7 @@ public class BirdFXMLController {
                     if (!gameController.isGameGestart()) {
                         gameController.startGame();
                     } else {
-                        vogel.setyCoord(vogel.getCenterumy() - 50);
+                        gameController.flap();
                     }
                     paneel.requestFocus();
                 }

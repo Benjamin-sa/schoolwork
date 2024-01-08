@@ -13,7 +13,7 @@ public class Bird {
     private AnchorPane paneel;
 
     public Bird(double x, double y, double radius, AnchorPane paneel) {
-        vogel = new Circle(x, y, radius);
+        this.vogel = new Circle(x, y, radius);
         this.vogel.setCenterX(x);
         this.vogel.setCenterY(y);
         this.xCoord = x;
@@ -25,12 +25,8 @@ public class Bird {
         
     }
 
-    public Circle getVogel() {
-        return vogel;
-    }
-
     public double getxCoord() {
-        return this.vogel.getCenterX();
+        return xCoord;
     }
 
     public void setxCoord(double x) {
@@ -39,7 +35,7 @@ public class Bird {
     }
 
     public double getyCoord() {
-        return this.yCoord;
+        return yCoord;
     }
 
     public void setyCoord(double y) {
@@ -55,10 +51,13 @@ public class Bird {
         return vogel.getCenterY();
     }
 
-    public void resetVogel() {
-        vogel.setCenterX(xEen);
-        vogel.setCenterY(yEen);
+    public Circle getVogel() {
+        return vogel;
     }
 
+    public void resetVogel(){
+        this.vogel.setCenterX(xEen);
+        this.vogel.setCenterY(yEen);
+    }
 }
 

@@ -13,6 +13,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -33,21 +34,26 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-public class ViewGame {
+
+
+
+public class ViewGame  {
     private AnchorPane paneel;
+    private Label highScore;
+    private double score = 0;
     private BirdFXMLController BirdFXMLController;
     private double openingHoogte = 100; // De hoogte van de opening tussen de pilaren
-    private GraphicsContext gc;
     private List<Pilaar> pilaren = new ArrayList<>();
     private Rectangle bovenGrens;
     private Rectangle onderGrens;
+    private Bird vogel;
     
 
 
 
 
 
-    public ViewGame(AnchorPane paneel, BirdFXMLController BirdFXMLController) {
+    public ViewGame(AnchorPane paneel, BirdFXMLController BirdFXMLController, Label highScore) {
         this.BirdFXMLController = BirdFXMLController;
         this.paneel = BirdFXMLController.getPaneel();
         this.pilaren = new ArrayList<>();
@@ -63,20 +69,35 @@ public class ViewGame {
 
     }
 
+    public Bird tekenVogel(){
+        vogel = new Bird(10, 125, 7, paneel);
+        paneel.getChildren().add(vogel.getVogel());
+        return vogel;
+    }
+
+
+    public Bird getVogel() {
+        return vogel;
+    }
+
+
+
+    
+
     public void tekenBorders() {
-        // Initialize bovenGrens and onderGrens
-    bovenGrens = new Rectangle(); // 10 is the thickness of the border
-    bovenGrens.heightProperty().set(10);
-    bovenGrens.widthProperty().bind(paneel.widthProperty());
-    bovenGrens.setFill(Color.RED); // The color of the border
+        // Initialiseer bovenGrens en onderGrens
+        bovenGrens = new Rectangle(); // 10 is de dikte van de rand
+        bovenGrens.heightProperty().set(10);
+        bovenGrens.widthProperty().bind(paneel.widthProperty());
+        bovenGrens.setFill(Color.RED); // De kleur van de rand
 
-    onderGrens = new Rectangle();
-    onderGrens.yProperty().bind(paneel.heightProperty().subtract(10));
-    onderGrens.heightProperty().set(10);
-    onderGrens.widthProperty().bind(paneel.widthProperty());
-    onderGrens.setFill(Color.RED);
+        onderGrens = new Rectangle();
+        onderGrens.yProperty().bind(paneel.heightProperty().subtract(10));
+        onderGrens.heightProperty().set(10);
+        onderGrens.widthProperty().bind(paneel.widthProperty());
+        onderGrens.setFill(Color.RED);
 
-    paneel.getChildren().addAll(bovenGrens, onderGrens);
+        paneel.getChildren().addAll(bovenGrens, onderGrens);
     }
 
     public Rectangle getBovenGrens() {
@@ -92,30 +113,22 @@ public class ViewGame {
 
     public void tekenPilaren() {
         int breedte = 10;
-        double Xpos = 200;  // Begin aan de rechterkant van het paneel
+        double Xpos = 200;
+        System.out.println(paneel.getWidth()); // Begin aan de rechterkant van het paneel
     
         // Maak een nieuwe Random om de hoogte van de opening te bepalen
         Random rand = new Random();
     
         // Maak een loop om meerdere pilaren te maken
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 2; i++) {
             // Bereken de y-positie van de opening
             double openingY = Math.max(rand.nextDouble() * (paneel.getHeight() - openingHoogte), 50);    
-            // Maak het bovenste deel van de pilaar
-            Rectangle bovenPilaar = new Rectangle(Xpos, 0, breedte, openingY);
-            bovenPilaar.setFill(Color.GREEN);
     
-            // Maak het onderste deel van de pilaar
-            double onderPilaarY = openingY + openingHoogte;
-            Rectangle onderPilaar = new Rectangle(Xpos, onderPilaarY, breedte, paneel.getHeight() - onderPilaarY);
-            onderPilaar.setFill(Color.GREEN);
-    
-            Pilaar pilaar = new Pilaar(bovenPilaar, onderPilaar, Xpos);
-            
+            Pilaar pilaar = new Pilaar(Xpos, openingY, openingHoogte, breedte, Color.GREEN, paneel);
     
             pilaren.add(pilaar);
-            
-            paneel.getChildren().addAll(bovenPilaar, onderPilaar);
+    
+            paneel.getChildren().addAll(pilaar.getBovenPilaar(), pilaar.getOnderPilaar());
     
             // Verhoog Xpos voor de volgende pilaar
             Xpos += 200;
@@ -123,12 +136,19 @@ public class ViewGame {
     }
 
 
+    public void updateScore() {
+        highScore.setText("Score: " + score); 
+    }
+
+
     public void reset() {
+        // Verwijder de oude pilaren
         pilaren.clear();
-
         paneel.getChildren().removeIf(node -> node instanceof Rectangle && Color.GREEN.equals(((Rectangle) node).getFill()));
-
+    
+        // Teken de nieuwe pilaren
         tekenPilaren();
+        
     }
 
     

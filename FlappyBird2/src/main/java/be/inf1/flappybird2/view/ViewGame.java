@@ -42,7 +42,6 @@ public class ViewGame  {
     private Label highScore;
     private double score = 0;
     private BirdFXMLController BirdFXMLController;
-    private double openingHoogte = 100; // De hoogte van de opening tussen de pilaren
     private List<Pilaar> pilaren = new ArrayList<>();
     private Rectangle bovenGrens;
     private Rectangle onderGrens;
@@ -113,18 +112,14 @@ public class ViewGame  {
 
     public void tekenPilaren() {
         int breedte = 10;
-        double Xpos = 200;
-        System.out.println(paneel.getWidth()); // Begin aan de rechterkant van het paneel
-    
+        double Xpos = 200;    
         // Maak een nieuwe Random om de hoogte van de opening te bepalen
         Random rand = new Random();
     
         // Maak een loop om meerdere pilaren te maken
         for (int i = 0; i < 2; i++) {
-            // Bereken de y-positie van de opening
-            double openingY = Math.max(rand.nextDouble() * (paneel.getHeight() - openingHoogte), 50);    
     
-            Pilaar pilaar = new Pilaar(Xpos, openingY, openingHoogte, breedte, Color.GREEN, paneel);
+            Pilaar pilaar = new Pilaar(Xpos, paneel);
     
             pilaren.add(pilaar);
     

@@ -12,6 +12,7 @@ public class Bird {
     private double yEen;
     private AnchorPane paneel;
     private double snelheid = 0;
+    private double zwaartekracht = 0.2;
 
     public Bird(double x, double y, double radius, AnchorPane paneel) {
         this.vogel = new Circle(x, y, radius);
@@ -59,6 +60,15 @@ public class Bird {
     public void resetVogel(){
         this.vogel.setCenterX(xEen);
         this.vogel.setCenterY(yEen);
+    }
+
+    public void update() {
+        snelheid += zwaartekracht;
+        setyCoord(getyCoord() + snelheid);
+    }
+
+    public void flap() {
+        snelheid = -5;
     }
 }
 

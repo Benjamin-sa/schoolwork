@@ -50,6 +50,8 @@ public class GameController {
     // De rest van je code...
 
     public void startGame() {
+
+        gameGestart = true;
         System.out.println("startGame");
         if (!gameGestart) {
             startTijd = System.currentTimeMillis();
@@ -57,10 +59,8 @@ public class GameController {
 
         // Start de game loop
         gameLoop = new Timeline(new KeyFrame(Duration.seconds(0.017), e -> {
-            scoreBereken();
-            beweegPilaren();
+            
             gameUpdate();
-            gameGestart = true;
 
             if (checkBotsingen()) {
                 gameLoop.stop();
@@ -75,16 +75,6 @@ public class GameController {
     }
 
 
-
-    public void scoreBereken(){
-        for (Pilaar pilaar : viewGame.getPilaren()){
-            int nieuweScore = (int) Math.abs(pilaar.getBovenPilaar().getTranslateX() / 200);
-            if (nieuweScore > score){
-                score = nieuweScore;
-                updateScore();
-            }
-        }
-    }
     
 
     public boolean checkBotsingen() {
@@ -120,7 +110,6 @@ public class GameController {
     }
 
     public void restartGame() {
-        score = 0;
         viewGame.reset();
         bird.resetVogel();
 
@@ -144,7 +133,7 @@ public void beweegPilaren() {
         pilaar.getOnderPilaar().setTranslateX(pilaar.getOnderPilaar().getTranslateX() - 2);
 
         // Controleer of de pilaar aan de rechterkant van het scherm is verdwenen
-        if (pilaar.getBovenPilaar().getTranslateX() < -paneel.getWidth()) {
+        if (pilaar.getBovenPilaar().getX() < -paneel.getWidth()) {
             // Reset de positie van de pilaar naar de rechterkant van het scherm
             pilaar.getBovenPilaar().setTranslateX(schermBreedte);
             pilaar.getOnderPilaar().setTranslateX(schermBreedte);
@@ -157,14 +146,10 @@ public void beweegPilaren() {
 }
 
 public void gameUpdate() {
-    snelheid += zwaartekracht;
-    bird.setyCoord(bird.getCenterumy() + snelheid);
+    bird.update();
+    beweegPilaren();
 }
 
-
-    public void flap() {
-        bird.setyCoord(bird.getCenterumy() - 50);
-    }
 
     public boolean isGameGestart() {
         return gameGestart;

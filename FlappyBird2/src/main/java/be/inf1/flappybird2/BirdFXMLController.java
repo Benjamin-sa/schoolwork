@@ -70,14 +70,11 @@ public class BirdFXMLController {
 
     @FXML
     void initialize() {
-        paneel.setMinSize(800, 400);
-        paneel.setMaxSize(800, 600);
-        paneel.setPrefSize(800, 400);                   
+                       
         view = new ViewGame(paneel, this, highScore);
         view.tekenVogel();
         paneel.setStyle("-fx-background-color: #00FFFF;");
         gameController = new GameController(view, vogel, paneel, rectangle);
-        this.vogel = view.getVogel();
 
         new Timer().schedule(new TimerTask() {
             @Override
@@ -92,7 +89,9 @@ public class BirdFXMLController {
         startKnop.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                gameController.startGame();
+                if (!gameController.isGameGestart()) {
+                    gameController.startGame();
+                }
                 paneel.requestFocus();
             }
         });
@@ -104,7 +103,7 @@ public class BirdFXMLController {
                     if (!gameController.isGameGestart()) {
                         gameController.startGame();
                     } else {
-                        gameController.flap();
+                        vogel.flap();
                     }
                     paneel.requestFocus();
                 }

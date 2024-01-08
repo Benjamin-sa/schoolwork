@@ -16,38 +16,44 @@ import javafx.scene.shape.Rectangle;
  */
 public class Pilaar {
 
-    
-        private double x = 200; 
+        private double x;
         private double yBoven, yOnder;
-        private Color kleur = Color.GREEN; // De kleur van de pilaren
-        private static final double opening = 30; // De opening tussen de pilaren
+        private Color kleur = Color.GREEN;
+        private Rectangle bovenPilaar;
+        private Rectangle onderPilaar;
+        private double opening;
         private double dikte = 20;
-        private double snelheid = 2;
-        private double paneelHoogte;
-        private Random rand = new Random();
+        private boolean isVoorbij = false;
 
 
+        public Pilaar(double x, double opening, double dikte, double paneelHoogte, Color kleur) {
+            Random rand = new Random();
+            double yBoven = rand.nextDouble() * (paneelHoogte - opening);
+            bovenPilaar = new Rectangle(x, 0, dikte, yBoven);
+            bovenPilaar.setFill(kleur);
         
-
-        public Pilaar() {  
-    }
-        
-
-
-    public void berekenPosities( double paneelhoogte) {
-
-            yBoven = 0;
-            //System.out.println(paneelhoogte - opening);
-            yOnder = rand.nextDouble() * ( paneelhoogte -  opening);
+            double yOnder = yBoven + opening;
+            double hoogteOnder = paneelHoogte - yOnder;
+            onderPilaar = new Rectangle(x, yOnder, dikte, hoogteOnder);
+            onderPilaar.setFill(kleur);
         }
 
 
+    public Rectangle getBovenPilaar() {
+            return bovenPilaar;
+    }
+
+    public Rectangle getOnderPilaar() {
+            return onderPilaar;
+    }
+        
     public void setX(double xPos){
-        this.x = xPos;  
+        bovenPilaar.setX(xPos);
+        onderPilaar.setX(xPos);  
     }
 
     public double getX(){
-        return x;
+        return bovenPilaar.getX();
     }
 
 
@@ -84,36 +90,15 @@ public class Pilaar {
         return dikte;
     } 
 
-
-    public void update(double paneelHoogte, double paneelBreedte) {
-        // Beweeg de pilaar naar links
-        x -= snelheid;
-
-        // Als de pilaar volledig uit het zicht is verdwenen...
-        if (x < 0) {
-            // ... verplaats het naar de rechterkant van het scherm ...
-            x = paneelBreedte;
-            // ... en geef het een nieuwe willekeurige y-positie
-            berekenPosities(paneelHoogte);
-        }
+    public boolean isVoorbij(){
+        return isVoorbij;
     }
 
-        
-
-        
-        
-
-         
-
-        
+    public void setVoorbij(boolean isVoorbij){
+        this.isVoorbij = isVoorbij;
+    }
 
 
-    
-    
-    
-    
-    
-    
-    
+
     
 }

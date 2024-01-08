@@ -7,49 +7,67 @@ import javafx.scene.shape.Circle;
 public class Bird {
     
 
-
-
+    
+    private Circle vogel;
     private double snelheid = 0;
     private double zwaartekracht = 0.2;
-    private double x = 100;
-    private double y = 10;
-    private double radius = 10;
+    private double startX, startY;
 
-    public Bird() {
+    public Bird(double x, double y, double radius, Color kleur) {
+        vogel = new Circle(x, y, radius);
+        vogel.setFill(kleur);
+        this.startX = x;
+        this.startY = y;
     }
 
     public double getxCoord() {
-        return x;
+        return vogel.getCenterX();
     }
 
     public void setxCoord(double x) {
-        this.x = x;
+        vogel.setCenterX(x);
     }
 
     public double getyCoord() {
-        return y;
+        return vogel.getCenterY();
     }
 
     public void setyCoord(double y) {
-        this.y = y;
+        vogel.setCenterY(y);
     }
 
     public Color getKleur() {
-        return Color.RED;
+        return (Color) vogel.getFill();
     }
 
     public double getRadius() {
-        return radius;
+        return vogel.getRadius();
     }
 
-
-    public void update() {
-        snelheid += zwaartekracht;
-        setyCoord(getyCoord() + snelheid);
+    public void setRadius(double radius) {
+        vogel.setRadius(radius);
     }
 
-    public void flap() {
+    public Circle getVogel() {
+        return vogel;
+    }
+
+    public void flap(){
+        double y = vogel.getCenterY();
+        vogel.setCenterY(y - 5);
         snelheid = -5;
+    }
+
+    public void val(){
+        double y = vogel.getCenterY();
+        snelheid += zwaartekracht;
+        vogel.setCenterY(y + snelheid);
+    }
+
+    public void reset(){
+        vogel.setCenterX(startX);
+        vogel.setCenterY(startY);
+        snelheid = 0;
     }
 
 }

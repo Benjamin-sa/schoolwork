@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.inf1.flappybird2.BirdFXMLController">
    <children>
-      <AnchorPane fx:id="paneel" layoutY="119.0" prefHeight="261.0" prefWidth="600.0">
+      <VBox fx:id="menu" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="speelSpel" mnemonicParsing="false" text="speel spel">
+               <VBox.margin>
+                  <Insets bottom="100.0" />
+               </VBox.margin>
+            </Button>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="45.0" prefWidth="277.0" text="naamSpeler">
+               <font>
+                  <Font size="32.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </Label>
+            <TextArea fx:id="spelerNaam" prefHeight="36.0" prefWidth="400.0">
+               <VBox.margin>
+                  <Insets bottom="30.0" left="150.0" right="150.0" />
+               </VBox.margin>
+            </TextArea>
+         </children>
+      </VBox>
+      <AnchorPane fx:id="paneel" layoutY="119.0" prefHeight="261.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
          </AnchorPane>
-      <Button fx:id="knop" layoutX="88.0" layoutY="41.0" mnemonicParsing="false" text="omhoogGaan" />
-      <Label fx:id="highScore" layoutX="278.0" layoutY="45.0" text="geeftHighScore" />
-      <Label fx:id="score" layoutX="278.0" layoutY="87.0" text="geeftScore" />
-      <Label text="Label" />
-      <Label fx:id="highscoreLabel" layoutX="210.0" layoutY="45.0" text="highScore" />
-      <Label fx:id="scoreLabel" layoutX="210.0" layoutY="87.0" text="Score" />
-      <Button fx:id="startKnop" layoutX="487.0" layoutY="41.0" mnemonicParsing="false" text="Start spel" />
+      <Label fx:id="highScore" layoutX="91.0" layoutY="45.0" text="geeftHighScore" />
+      <Label fx:id="score" layoutX="272.0" layoutY="46.0" text="geeftScore" />
+      <Label fx:id="highscoreLabel" layoutX="20.0" layoutY="45.0" text="highScore" />
+      <Label fx:id="scoreLabel" layoutX="212.0" layoutY="46.0" text="Score" />
+      <Button fx:id="startKnop" layoutX="487.0" layoutY="41.0" mnemonicParsing="false" text="speel opnieuw" />
    </children>
 </AnchorPane>

@@ -1,5 +1,6 @@
 package be.inf1.flappybird2.model;
 
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -10,7 +11,7 @@ public class Bird {
     
     private Circle vogel;
     private double snelheid = 0;
-    private double zwaartekracht = 0.2;
+    private double zwaartekracht = 0.3;
     private double startX, startY;
 
     public Bird(double x, double y, double radius, Color kleur) {

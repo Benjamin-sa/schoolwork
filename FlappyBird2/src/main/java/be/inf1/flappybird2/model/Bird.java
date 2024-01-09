@@ -1,6 +1,10 @@
 package be.inf1.flappybird2.model;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -13,13 +17,34 @@ public class Bird {
     private double snelheid = 0;
     private double zwaartekracht = 0.2;
     private double startX, startY;
+    private Color kleur;
+    private List<Image> vogelAnimatie;
+    private int fotoIndex;
 
-    public Bird(double x, double y, double radius, Color kleur) {
-        vogel = new Circle(x, y, radius);
+    public Bird() {
+        vogel = new Circle();
         vogel.setFill(kleur);
+    }
+
+    public void setEersteX(double x) {
+        vogel.setCenterX(x);
         this.startX = x;
+    }
+    
+    public void setEersteY(double y) {
+        vogel.setCenterY(y);
         this.startY = y;
     }
+
+    public void setRadius(double radius) {
+        vogel.setRadius(radius);
+    }
+
+    public void setKleur(Color kleur) {
+        vogel.setFill(kleur);
+    }
+
+
 
     public double getxCoord() {
         return vogel.getCenterX();
@@ -45,18 +70,20 @@ public class Bird {
         return vogel.getRadius();
     }
 
-    public void setRadius(double radius) {
-        vogel.setRadius(radius);
-    }
 
     public Circle getVogel() {
         return vogel;
+    }
+
+    public Image getFoto() {
+        return vogelAnimatie.get(fotoIndex);
     }
 
     public void flap(){
         double y = vogel.getCenterY();
         vogel.setCenterY(y - 5);
         snelheid = -5;
+        fotoIndex = (fotoIndex + 1) % vogelAnimatie.size();
     }
 
     public void val(){

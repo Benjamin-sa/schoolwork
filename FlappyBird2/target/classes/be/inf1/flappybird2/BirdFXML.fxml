@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -39,8 +41,37 @@
             </TextArea>
          </children>
       </VBox>
-      <AnchorPane fx:id="paneel" layoutY="119.0" prefHeight="261.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
-         </AnchorPane>
+      <AnchorPane fx:id="paneel" layoutY="75.0" prefHeight="325.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+         <children>
+            <ImageView fx:id="foto1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../fotos/2207_w026_n002_2267b_p1_2267.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="foto2" fitHeight="150.0" fitWidth="200.0" layoutX="246.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../fotos/2207_w026_n002_2267b_p1_2267-EDIT.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="vogelUp" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="44.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../fotos/bird_up.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="vogelDown" fitHeight="150.0" fitWidth="200.0" layoutX="37.0" layoutY="157.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../fotos/bird_down.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="vogelMid" fitHeight="150.0" fitWidth="200.0" layoutX="175.0" layoutY="151.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../fotos/bird_mid.png" />
+               </image>
+            </ImageView>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></AnchorPane>
       <Label fx:id="highScore" layoutX="91.0" layoutY="37.0" prefHeight="25.0" prefWidth="30.0" />
       <Label fx:id="score" layoutX="216.0" layoutY="38.0" prefHeight="25.0" prefWidth="30.0" />
       <Label fx:id="highscoreLabel" layoutX="20.0" layoutY="45.0" text="highScore" />

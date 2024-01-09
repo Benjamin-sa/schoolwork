@@ -17,29 +17,33 @@ import javafx.scene.shape.Rectangle;
 public class Pilaar {
 
        private double yBoven, yOnder;
-        private Color kleur = Color.GREEN;
         private Rectangle bovenPilaar;
         private Rectangle onderPilaar;
         private double opening;
-        private double dikte;
         private boolean isVoorbij = false;
-        private double snelheid = 5;
 
 
-        public Pilaar(double x, double opening, double dikte, double paneelHoogte, Color kleur) {
-            Random rand = new Random();
-            this.opening = opening;
-            this.kleur = kleur;
-            this.dikte = dikte;
-            double yBoven = rand.nextDouble() * (paneelHoogte - opening);
-            bovenPilaar = new Rectangle(x, 0, dikte, yBoven);
+        private double snelheid = 2;
+        private double beginAfstand = 300;
+        private double tussenAfstand = 200;
+        private double dikte = 30;
+        private double paneelHoogte;
+        private Color kleur = Color.GREEN;
+        private double x;
+
+
+
+
+        public Pilaar() {
+            
+            bovenPilaar = new Rectangle(x, 0, dikte, 0);
             bovenPilaar.setFill(kleur);
         
-            double yOnder = yBoven + opening;
-            double hoogteOnder = paneelHoogte - yOnder;
-            onderPilaar = new Rectangle(x, yOnder, dikte, hoogteOnder);
+            onderPilaar = new Rectangle(x, 0, dikte, 0);
             onderPilaar.setFill(kleur);
         }
+
+        
 
     public void resetOpening(double paneelHoogte) {
         Random rand = new Random();
@@ -51,6 +55,34 @@ public class Pilaar {
         onderPilaar.setY(yOnder);
         onderPilaar.setHeight(hoogteOnder);
     }
+
+    public void setPaneelHoogte(double paneelHoogte){
+        this.paneelHoogte = paneelHoogte;
+    }
+
+    public double getPaneelHoogte(){
+        return paneelHoogte;
+    }
+
+    public void setDikte(double dikte){
+        this.dikte = dikte;
+    }
+    
+    public double getDikte(){
+        return dikte;
+    }
+
+    public double berekenBeginPositie(int i){
+        return (1 + i) * tussenAfstand + beginAfstand;
+    }
+
+    public void setTussenAfstand(double tussenAfstand){
+        this.tussenAfstand = tussenAfstand;
+    }
+
+    public double getTussenAfstand(){
+        return tussenAfstand;
+    }   
 
 
     public Rectangle getBovenPilaar() {
@@ -96,13 +128,13 @@ public class Pilaar {
         return yOnder;
     }
 
+    public void setOpening(double opening){
+        this.opening = opening;
+    }
+
     public double getOpening(){
         return opening;
     }
-
-    public double getDikte(){
-        return dikte;
-    } 
 
     public boolean isVoorbij(){
         return isVoorbij;

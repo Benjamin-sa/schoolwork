@@ -3,18 +3,10 @@ package be.inf1.flappybird2;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,17 +19,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import be.inf1.flappybird2.model.Pilaar;
 import be.inf1.flappybird2.model.Bird;
 import be.inf1.flappybird2.model.Grenzen;
-import be.inf1.flappybird2.SpelerGegevens;
 
 public class BirdFXMLController {
 
@@ -83,12 +75,22 @@ public class BirdFXMLController {
     @FXML
     private ListView<String> lijst;
 
+    @FXML
+    private ImageView foto1;
+
+    @FXML
+    private ImageView foto2;
+
+    @FXML
+    private ImageView vogelUp;
+
+    @FXML
+    private ImageView vogelMid;
+
+    @FXML
+    private ImageView vogelDown;
+
     private Controller gameController;
-    private Grenzen grenzen;
-    public Timeline gameLoop;
-    private Bird birdModel;
-    List<Pilaar> pilaarModels = new ArrayList<>();
-    private Grenzen grenzenModel;
 
     public BirdFXMLController() {
 
@@ -97,32 +99,36 @@ public class BirdFXMLController {
     @FXML
     void initialize() {
 
-        
         paneel.setVisible(false);
         startKnop.setVisible(false);
-        PauseTransition pause = new PauseTransition(Duration.seconds(0.2));
-        pause.setOnFinished(event -> {
-            for (int i = 1; i < 10; i++) {
-                double x = i * 300;
-                Pilaar pilaar = new Pilaar(x, 100, 30, paneel.getHeight(), Color.GREEN);
-                pilaarModels.add(pilaar);
-            }
-            // vogel initailiseren
-            birdModel = new Bird(100, 100, 5, Color.RED);
-            // grenzen initialiseren
-            grenzenModel = new Grenzen(0, 0, paneel.getWidth(), paneel.getHeight(), Color.RED, 10);
+        vogelDown.setVisible(false);
+        vogelMid.setVisible(false);
+
+        // Vertraging wegens trage paneel rendering
+        Duration delay = Duration.seconds(1);
+        Timeline timeline = new Timeline(new KeyFrame(delay, event -> {
             // gameController initialiseren
-            gameController = new Controller(this, birdModel, grenzenModel, pilaarModels);
+            gameController = new Controller(this);
             // beste spelers updaten
             updateBesteSpelers();
 
-        });
-        pause.play();
+            foto1.setLayoutX(0);
+            foto1.setLayoutY(0);
+            foto1.setFitHeight(paneel.getHeight());
+            foto1.setFitWidth(paneel.getWidth());
+
+            foto2.setLayoutX(paneel.getWidth());
+            foto2.setLayoutY(0);
+            foto2.setFitHeight(paneel.getHeight());
+            foto2.setFitWidth(paneel.getWidth());
+        }));
+        timeline.play();
 
         speelSpel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 menu.setVisible(false);
+                hBox.setVisible(false);
                 paneel.setVisible(true);
                 startKnop.setVisible(true);
                 plaatsElementen();
@@ -136,45 +142,69 @@ public class BirdFXMLController {
             public void handle(ActionEvent event) {
                 if (!gameController.isGameGestart()) {
                     gameController.startGame();
-                    birdModel.reset();
-                    gameController.setSpelerNaam(spelerNaam.getText());
+
+                if(gameController.isGameGestart()){
+                    gameController.resetGame();
                 }
+            }
                 paneel.requestFocus();
             }
         });
-    
 
         paneel.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.SPACE) {
-                    if(!gameController.isGameGestart()) {
-                        gameController.startGame();
+
+                    if (gameController.isGameGestart()) {
+                        gameController.flap();
+
+                        // Roteer tussen de vogelafbeeldingen
+                        if (vogelUp.isVisible()) {
+                            vogelMidZichtbaar();
+                        } else if (vogelMid.isVisible()) {
+                            vogelDownZichtbaar();
+                        } else {
+                            vogelUpZichtbaarr();
+                        }
                     }
-                if (gameController.isGameGestart()) {
-                    gameController.flap();
-                }
                     paneel.requestFocus();
-                
-                }}
+                }
+            }
         });
 
         paneel.setFocusTraversable(true);
-
     }
 
-    public void plaatsElementen(){
-
-        for (Pilaar pilaar : pilaarModels) {
+    public void plaatsElementen() {
+        for (Pilaar pilaar : gameController.getPilaren()) {
             Rectangle bovenPilaar = pilaar.getBovenPilaar();
-        Rectangle onderPilaar = pilaar.getOnderPilaar();
-        paneel.getChildren().addAll(bovenPilaar, onderPilaar);
+            Rectangle onderPilaar = pilaar.getOnderPilaar();
+            paneel.getChildren().addAll(bovenPilaar, onderPilaar);
         }
-        
-        Rectangle bovenGrens = grenzenModel.getBovenGrens();
-        Rectangle onderGrens = grenzenModel.getOnderGrens();
-        Circle vogel = birdModel.getVogel();
+
+        Grenzen grenzen = gameController.getGrenzen();
+        Rectangle bovenGrens = grenzen.getBovenGrens();
+        Rectangle onderGrens = grenzen.getOnderGrens();
+
+        Bird bird = gameController.getBird();
+        Circle vogel = bird.getVogel();
         paneel.getChildren().addAll(bovenGrens, onderGrens, vogel);
+    }
+
+    public void scrollendeAchtergrond() {
+
+        double snelheidsverhouding = gameController.getPilaarBreedte() / (paneel.getWidth());
+        double aangepasteSnelheid = gameController.getSnelheid() * snelheidsverhouding;
+        foto1.setLayoutX(foto1.getLayoutX() - aangepasteSnelheid);
+        foto2.setLayoutX(foto2.getLayoutX() - aangepasteSnelheid);
+
+        if (foto1.getLayoutX() + foto1.getFitWidth() <= 0) {
+            foto1.setLayoutX(foto2.getLayoutX() + foto2.getFitWidth());
+        }
+        if (foto2.getLayoutX() + foto2.getFitWidth() <= 0) {
+            foto2.setLayoutX(foto1.getLayoutX() + foto1.getFitWidth());
+        }
     }
 
     public void updateBesteSpelers() {
@@ -189,9 +219,48 @@ public class BirdFXMLController {
         lijst.setItems(FXCollections.observableArrayList(besteSpelerLijst));
     }
 
+    public void updateVogelAnimatie() {
+        double diameter = gameController.getCircle().getRadius() * 2;
+
+        vogelUp.setFitWidth(diameter);
+        vogelUp.setFitHeight(diameter);
+        vogelUp.setLayoutX(gameController.getBird().getxCoord() - diameter / 2);
+        vogelUp.setLayoutY((gameController.getBird().getyCoord() - diameter / 2));
+        System.out.println(gameController.getBird().getyCoord());
+        System.out.println(gameController.getBird().getyCoord());
+
+        vogelMid.setFitWidth(diameter);
+        vogelMid.setFitHeight(diameter);
+        vogelMid.setLayoutX(gameController.getBird().getxCoord() - diameter / 2);
+        vogelMid.setLayoutY(gameController.getBird().getyCoord() - diameter / 2);
+
+        vogelDown.setFitWidth(diameter);
+        vogelDown.setFitHeight(diameter);
+        vogelDown.setLayoutX(gameController.getBird().getxCoord() - diameter / 2);
+        vogelDown.setLayoutY(gameController.getBird().getyCoord() - diameter / 2);
+
+    }
+
+    public void vogelUpZichtbaarr() {
+        vogelUp.setVisible(true);
+        vogelMid.setVisible(false);
+        vogelDown.setVisible(false);
+    }
+
+    public void vogelMidZichtbaar() {
+        vogelUp.setVisible(false);
+        vogelMid.setVisible(true);
+        vogelDown.setVisible(false);
+    }
+
+    public void vogelDownZichtbaar() {
+        vogelUp.setVisible(false);
+        vogelMid.setVisible(false);
+        vogelDown.setVisible(true);
+    }
+
     public void updateScore(int scoreWaarde) {
         score.setText(Integer.toString(scoreWaarde));
-        
     }
 
     public void updateLevel(int levelWaarde) {
@@ -209,8 +278,4 @@ public class BirdFXMLController {
     public double getPaneelBreedte() {
         return paneel.getWidth();
     }
-
-
-    
-
 }

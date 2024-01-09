@@ -5,7 +5,7 @@ module be.inf1.flappybird2 {
     requires com.google.gson;
 
 
-    opens be.inf1.flappybird2 to javafx.fxml;
+    opens be.inf1.flappybird2 to com.google.gson, javafx.fxml;
     exports be.inf1.flappybird2;
     requires transitive javafx.graphics;
 }

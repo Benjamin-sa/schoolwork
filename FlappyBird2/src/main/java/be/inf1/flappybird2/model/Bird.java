@@ -11,7 +11,7 @@ public class Bird {
     
     private Circle vogel;
     private double snelheid = 0;
-    private double zwaartekracht = 0.3;
+    private double zwaartekracht = 0.2;
     private double startX, startY;
 
     public Bird(double x, double y, double radius, Color kleur) {

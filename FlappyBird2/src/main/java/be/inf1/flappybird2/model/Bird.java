@@ -1,11 +1,7 @@
 package be.inf1.flappybird2.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
 
-import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -14,12 +10,15 @@ public class Bird {
 
     
     private Circle vogel;
+    private double sprongKracht = -4;
     private double snelheid = 0;
     private double zwaartekracht = 0.2;
-    private double startX, startY;
+    private double rotatieHoek;
+    private double startY, startX;
+    private double dy;
     private Color kleur;
-    private List<Image> vogelAnimatie;
-    private int fotoIndex;
+
+
 
     public Bird() {
         vogel = new Circle();
@@ -43,8 +42,6 @@ public class Bird {
     public void setKleur(Color kleur) {
         vogel.setFill(kleur);
     }
-
-
 
     public double getxCoord() {
         return vogel.getCenterX();
@@ -70,27 +67,37 @@ public class Bird {
         return vogel.getRadius();
     }
 
+    public void setSprongkracht(double sprongKracht) {
+        this.sprongKracht = sprongKracht;
+    }
+
+    public double getSprongkracht() {
+        return sprongKracht;
+    }
 
     public Circle getVogel() {
         return vogel;
     }
 
-    public Image getFoto() {
-        return vogelAnimatie.get(fotoIndex);
-    }
-
     public void flap(){
-        double y = vogel.getCenterY();
-        vogel.setCenterY(y - 5);
-        snelheid = -5;
-        fotoIndex = (fotoIndex + 1) % vogelAnimatie.size();
+        snelheid = sprongKracht;
     }
 
     public void val(){
         double y = vogel.getCenterY();
         snelheid += zwaartekracht;
         vogel.setCenterY(y + snelheid);
+
+        //verandering in y
+        dy = y - (y + snelheid);
+
+        rotatieHoek = Math.toDegrees(Math.atan2(dy, 1));
     }
+
+    public double getRotatieHoek(){
+        return rotatieHoek;
+    }
+ 
 
     public void reset(){
         vogel.setCenterX(startX);

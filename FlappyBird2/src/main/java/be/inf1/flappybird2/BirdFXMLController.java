@@ -4,6 +4,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+/**
+ *
+ * @author Benjamin
+ */
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,11 +23,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
@@ -61,19 +65,23 @@ public class BirdFXMLController {
     private Label levelCounter;
 
     @FXML
-    private Button startKnop;
+    private Button speelOpnieuw;
 
     @FXML
     private TextArea spelerNaam;
 
     @FXML
-    private VBox menu;
+    private Pane menu;
 
-    @FXML
-    private HBox hBox;
+    @
+    FXML
+    private Pane gameOver;
 
     @FXML
     private ListView<String> lijst;
+
+    @FXML
+    private StackPane spackPane;
 
     @FXML
     private ImageView foto1;
@@ -91,6 +99,7 @@ public class BirdFXMLController {
     private ImageView vogelDown;
 
     private Controller gameController;
+    private boolean spatieBalk = true;
 
     public BirdFXMLController() {
 
@@ -98,20 +107,23 @@ public class BirdFXMLController {
 
     @FXML
     void initialize() {
+    
 
         paneel.setVisible(false);
-        startKnop.setVisible(false);
+        gameOver.setVisible(false);
         vogelDown.setVisible(false);
         vogelMid.setVisible(false);
+        vogelDown.setVisible(false);
 
         // Vertraging wegens trage paneel rendering
-        Duration delay = Duration.seconds(1);
+        Duration delay = Duration.seconds(0.2);
         Timeline timeline = new Timeline(new KeyFrame(delay, event -> {
             // gameController initialiseren
             gameController = new Controller(this);
             // beste spelers updaten
             updateBesteSpelers();
 
+            // Achtergrond fotos goed zetten
             foto1.setLayoutX(0);
             foto1.setLayoutY(0);
             foto1.setFitHeight(paneel.getHeight());
@@ -128,48 +140,38 @@ public class BirdFXMLController {
             @Override
             public void handle(ActionEvent event) {
                 menu.setVisible(false);
-                hBox.setVisible(false);
                 paneel.setVisible(true);
-                startKnop.setVisible(true);
                 plaatsElementen();
                 paneel.requestFocus();
                 gameController.setSpelerNaam(spelerNaam.getText());
             }
         });
 
-        startKnop.setOnAction(new EventHandler<ActionEvent>() {
+        speelOpnieuw.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (!gameController.isGameGestart()) {
-                    gameController.startGame();
+                    if (!gameController.getGameGestart()) {
+                        gameController.resetGame();
+                        gameOver.setVisible(false);
+                        paneel.setVisible(true);
 
-                if(gameController.isGameGestart()){
-                    gameController.resetGame();
                 }
-            }
                 paneel.requestFocus();
             }
         });
 
+
         paneel.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.SPACE) {
+                if (event.getCode() == KeyCode.SPACE && spatieBalk) {
 
-                    if (gameController.isGameGestart()) {
+                    if (!gameController.getGameGestart()) {
+                        gameController.startGame();
+                    } else {
                         gameController.flap();
-
-                        // Roteer tussen de vogelafbeeldingen
-                        if (vogelUp.isVisible()) {
-                            vogelMidZichtbaar();
-                        } else if (vogelMid.isVisible()) {
-                            vogelDownZichtbaar();
-                        } else {
-                            vogelUpZichtbaarr();
-                        }
-                    }
-                    paneel.requestFocus();
-                }
+                    }}
+                    
             }
         });
 
@@ -207,6 +209,10 @@ public class BirdFXMLController {
         }
     }
 
+    public void startGameOver(){
+        gameOver.setVisible(true);
+    }
+
     public void updateBesteSpelers() {
         List<SpelerGegevens> besteSpelers = gameController.getBesteSpelers();
 
@@ -215,30 +221,45 @@ public class BirdFXMLController {
         for (SpelerGegevens speler : besteSpelers) {
             besteSpelerLijst.add(speler.getNaam() + "score = " + speler.getHighScore());
         }
-
         lijst.setItems(FXCollections.observableArrayList(besteSpelerLijst));
     }
 
+
+
+    // Update de positie van de PNG fotos van de vogel
     public void updateVogelAnimatie() {
-        double diameter = gameController.getCircle().getRadius() * 2;
+        double afmetingCircle = gameController.getCircle().getRadius() * 2;
 
-        vogelUp.setFitWidth(diameter);
-        vogelUp.setFitHeight(diameter);
-        vogelUp.setLayoutX(gameController.getBird().getxCoord() - diameter / 2);
-        vogelUp.setLayoutY((gameController.getBird().getyCoord() - diameter / 2));
-        System.out.println(gameController.getBird().getyCoord());
-        System.out.println(gameController.getBird().getyCoord());
+        vogelUp.setFitWidth(afmetingCircle);
+        vogelUp.setFitHeight(afmetingCircle);
+        vogelUp.setLayoutX(gameController.getBird().getxCoord() - afmetingCircle / 2);
+        vogelUp.setLayoutY((gameController.getBird().getyCoord() - afmetingCircle / 2));
+       
+        vogelMid.setFitWidth(afmetingCircle);
+        vogelMid.setFitHeight(afmetingCircle);
+        vogelMid.setLayoutX(gameController.getBird().getxCoord() - afmetingCircle / 2);
+        vogelMid.setLayoutY(gameController.getBird().getyCoord() - afmetingCircle / 2);
 
-        vogelMid.setFitWidth(diameter);
-        vogelMid.setFitHeight(diameter);
-        vogelMid.setLayoutX(gameController.getBird().getxCoord() - diameter / 2);
-        vogelMid.setLayoutY(gameController.getBird().getyCoord() - diameter / 2);
+        vogelDown.setFitWidth(afmetingCircle);
+        vogelDown.setFitHeight(afmetingCircle);
+        vogelDown.setLayoutX(gameController.getBird().getxCoord() - afmetingCircle / 2);
+        vogelDown.setLayoutY(gameController.getBird().getyCoord() - afmetingCircle / 2);
 
-        vogelDown.setFitWidth(diameter);
-        vogelDown.setFitHeight(diameter);
-        vogelDown.setLayoutX(gameController.getBird().getxCoord() - diameter / 2);
-        vogelDown.setLayoutY(gameController.getBird().getyCoord() - diameter / 2);
 
+        if (vogelUp.isVisible()) {
+            vogelMidZichtbaar();
+        } else if (vogelMid.isVisible()) {
+            vogelDownZichtbaar();
+        } else {
+            vogelUpZichtbaarr();
+        }
+
+        //roteren van de vogel volgens dy
+        double rotatieHoek = gameController.getBird().getRotatieHoek() / 3; //  /3 anders bird on steroids 
+
+        vogelUp.setRotate(rotatieHoek);
+        vogelMid.setRotate(rotatieHoek);
+        vogelDown.setRotate(rotatieHoek);
     }
 
     public void vogelUpZichtbaarr() {
@@ -257,6 +278,10 @@ public class BirdFXMLController {
         vogelUp.setVisible(false);
         vogelMid.setVisible(false);
         vogelDown.setVisible(true);
+    }
+
+    public void stopPaneel() {
+        paneel.setVisible(false);
     }
 
     public void updateScore(int scoreWaarde) {
@@ -278,4 +303,13 @@ public class BirdFXMLController {
     public double getPaneelBreedte() {
         return paneel.getWidth();
     }
+
+    public boolean getSpatieBalk() {
+        return spatieBalk;
+    }
+
+    public void setSpatieBalk(boolean spatieBalk) {
+        this.spatieBalk = spatieBalk;
+    }
+
 }

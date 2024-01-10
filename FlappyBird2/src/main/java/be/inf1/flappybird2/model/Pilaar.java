@@ -4,12 +4,11 @@
  */
 package be.inf1.flappybird2.model;
 
-import java.util.Random;
 
-import javafx.scene.layout.AnchorPane;
+
+import java.util.Random;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
 /**
  *
  * @author Jahma
@@ -24,6 +23,7 @@ public class Pilaar {
 
 
         private double snelheid = 2;
+        private double snelheidVerhoogd = 0.3;
         private double beginAfstand = 300;
         private double tussenAfstand = 200;
         private double dikte = 30;
@@ -46,8 +46,10 @@ public class Pilaar {
         
 
     public void resetOpening(double paneelHoogte) {
-        Random rand = new Random();
-        double yBoven = rand.nextDouble() * (paneelHoogte - opening);
+
+        // getal tussen 0.2 en 0.8 zodat het niet bij de randen open is 
+        double getalTussen02en08 = 0.2 + (0.8 - 0.2) * new Random().nextDouble();
+        double yBoven = getalTussen02en08 * (paneelHoogte - opening);
         bovenPilaar.setHeight(yBoven);
 
         double yOnder = yBoven + opening;
@@ -60,6 +62,11 @@ public class Pilaar {
         this.paneelHoogte = paneelHoogte;
     }
 
+    public void verHoogsnelheid(){
+        snelheid += snelheidVerhoogd;
+    }
+
+    //beetje overbodig
     public double getPaneelHoogte(){
         return paneelHoogte;
     }
@@ -151,6 +158,22 @@ public class Pilaar {
     public void setSnelheid(double snelheid){
         this.snelheid = snelheid;
     }
+
+    public void setSnelheidVerhoogd(double snelheidVerhoogd){
+        this.snelheidVerhoogd = snelheidVerhoogd;
+    }  
+
+    public double getSnelheidVerhoogd(){
+        return snelheidVerhoogd;
+    }
+
+    public void SetBeginAfstand(double beginAfstand){
+        this.beginAfstand = beginAfstand;
+    }   
+
+    public double getBeginAfstand(){
+        return beginAfstand;
+    }   
 
 
 

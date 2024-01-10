@@ -2,7 +2,10 @@ package be.inf1.flappybird2;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ *
+ * @author Benjamin
+ */
 import be.inf1.flappybird2.model.Pilaar;
 import be.inf1.flappybird2.model.Bird;
 import be.inf1.flappybird2.model.Grenzen;
@@ -36,11 +39,9 @@ public class Controller {
             Pilaar pilaarModel = new Pilaar();
             double x = pilaarModel.berekenBeginPositie(i);
             pilaarModel.setX(x);
-            pilaarModel.setOpening(80);
-            pilaarModel.setPaneelHoogte(view.getPaneelHoogte());
+            pilaarModel.setOpening(100);
             pilaarModel.setPaneelHoogte(view.getPaneelHoogte());
             pilaarModel.resetOpening(view.getPaneelHoogte());
-            System.out.println("Pilaar " + i + " paneelHoogte " + view.getPaneelHoogte());
             pilaren.add(pilaarModel);
         }
 
@@ -73,6 +74,8 @@ public class Controller {
         movePilaren.setCycleCount(Timeline.INDEFINITE);
         movePilaren.play();
     }
+
+
 
     // Update het spel
     public void updateGame() {
@@ -143,22 +146,33 @@ public class Controller {
     // Verhoogt het level
     public void levelUp() {
         for (Pilaar pilaar : pilaren) {
-            pilaar.setSnelheid(pilaar.getSnelheid() + 0.5);
-            System.out.println("Snelheid: " + pilaar.getSnelheid());
+            pilaar.setSnelheid(pilaar.getSnelheid() + pilaar.getSnelheidVerhoogd());
         }
     }
 
     // Stopt het spel
     public void stopGame() {
-        scoreWaarde = 0;
-        view.updateScore(scoreWaarde);
+        view.stopPaneel();
+        view.startGameOver();
+        view.setSpatieBalk(false);
         setGameGestart(false);
+        System.out.println(getGameGestart());
         movePilaren.stop();
     }
 
     // Reset het spel
     public void resetGame() {
         bird.reset();
+        scoreWaarde = 0;
+        level = 0;
+        view.updateLevel(level);
+        view.updateScore(scoreWaarde);
+
+        for (Pilaar pilaar : pilaren) {
+            double x = pilaar.berekenBeginPositie(pilaren.indexOf(pilaar));
+            pilaar.setX(x);
+            pilaar.setSnelheid(2);
+        }
     }
 
     // Herstart het spel
@@ -176,7 +190,6 @@ public class Controller {
             highScoreWaarde = scoreWaarde;
             view.updateHighScore(highScoreWaarde);
         }
-        System.out.println("Score: " + scoreWaarde);
     }
 
     // Geeft de hoogste score terug
@@ -185,7 +198,7 @@ public class Controller {
     }
 
     // Geeft aan of het spel gestart is
-    public boolean isGameGestart() {
+    public boolean getGameGestart() {
         return gameGestart;
     }
 

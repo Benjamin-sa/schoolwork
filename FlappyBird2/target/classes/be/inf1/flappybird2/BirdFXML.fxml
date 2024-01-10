@@ -9,38 +9,60 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.inf1.flappybird2.BirdFXMLController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.inf1.flappybird2.BirdFXMLController">
    <children>
-      <HBox fx:id="hBox" layoutY="75.0" prefHeight="325.0" prefWidth="251.0">
+      <StackPane fx:id="stackPane" layoutY="75.0" prefHeight="325.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
          <children>
-            <ListView fx:id="lijst" prefHeight="325.0" prefWidth="262.0" />
+            <Pane fx:id="gameOver" prefHeight="325.0" prefWidth="554.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="325.0" prefWidth="300.0">
+                     <children>
+                        <Button fx:id="speelOpnieuw" mnemonicParsing="false" text="speel opnieuw" />
+                     </children>
+                  </VBox>
+               </children>
+               <StackPane.margin>
+                  <Insets left="150.0" right="150.0" />
+               </StackPane.margin>
+            </Pane>
+            <Pane fx:id="menu" prefHeight="335.0" prefWidth="600.0">
+               <children>
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="270.0" prefWidth="600.0">
+                     <children>
+                        <Button fx:id="speelSpel" mnemonicParsing="false" text="speel spel">
+                           <VBox.margin>
+                              <Insets bottom="50.0" left="200.0" top="70.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="200.0" text="naamSpeler">
+                           <font>
+                              <Font size="32.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="250.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextArea fx:id="spelerNaam" prefHeight="37.0" prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="100.0" left="300.0" right="50.0" />
+                           </VBox.margin>
+                        </TextArea>
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="325.0" prefWidth="251.0">
+                     <children>
+                        <ListView fx:id="lijst" prefHeight="325.0" prefWidth="262.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
          </children>
-      </HBox>
-      <VBox fx:id="menu" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Button fx:id="speelSpel" mnemonicParsing="false" text="speel spel">
-               <VBox.margin>
-                  <Insets bottom="50.0" left="200.0" top="70.0" />
-               </VBox.margin>
-            </Button>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="200.0" text="naamSpeler">
-               <font>
-                  <Font size="32.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="250.0" />
-               </VBox.margin>
-            </Label>
-            <TextArea fx:id="spelerNaam" prefHeight="37.0" prefWidth="200.0">
-               <VBox.margin>
-                  <Insets bottom="100.0" left="300.0" right="50.0" />
-               </VBox.margin>
-            </TextArea>
-         </children>
-      </VBox>
+      </StackPane>
       <AnchorPane fx:id="paneel" layoutY="75.0" prefHeight="325.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
          <children>
             <ImageView fx:id="foto1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
@@ -76,7 +98,6 @@
       <Label fx:id="score" layoutX="216.0" layoutY="38.0" prefHeight="25.0" prefWidth="30.0" />
       <Label fx:id="highscoreLabel" layoutX="20.0" layoutY="45.0" text="highScore" />
       <Label fx:id="scoreLabel" layoutX="173.0" layoutY="46.0" prefHeight="17.0" prefWidth="37.0" text="Score" />
-      <Button fx:id="startKnop" layoutX="487.0" layoutY="41.0" mnemonicParsing="false" text="speel opnieuw" />
       <Label layoutX="282.0" layoutY="27.0" prefHeight="47.0" prefWidth="37.0" text="Level" />
       <Label fx:id="levelCounter" layoutX="353.0" layoutY="32.0" prefHeight="47.0" prefWidth="53.0" />
    </children>

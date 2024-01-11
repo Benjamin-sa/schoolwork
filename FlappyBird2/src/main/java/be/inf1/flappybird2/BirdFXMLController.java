@@ -22,10 +22,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.image.ImageView;
@@ -115,7 +113,7 @@ public class BirdFXMLController {
         vogelMid.setVisible(false);
         vogelDown.setVisible(false);
 
-        // Vertraging wegens trage paneel rendering
+        // Vertraging wegens trage paneel rendering oplossing volgens Copilot code
         Duration delay = Duration.seconds(0.2);
         Timeline timeline = new Timeline(new KeyFrame(delay, event -> {
             // gameController initialiseren
@@ -195,6 +193,8 @@ public class BirdFXMLController {
         paneel.getChildren().addAll(bovenGrens, onderGrens, vogel);
     }
 
+
+    //  Copilot code
     public void scrollendeAchtergrond() {
 
         double snelheidsverhouding = gameController.getPilaarBreedte() / (paneel.getWidth());
@@ -227,7 +227,7 @@ public class BirdFXMLController {
 
 
 
-    // Update de positie van de PNG fotos van de vogel
+    // Update de positie van de PNG fotos van de vogel volgens Copilot code
     public void updateVogelAnimatie() {
         double afmetingCircle = gameController.getCircle().getRadius() * 2;
 
@@ -255,7 +255,7 @@ public class BirdFXMLController {
             vogelUpZichtbaarr();
         }
 
-        //roteren van de vogel volgens dy
+        //roteren van de vogel volgens dy volgens Copilot code
         double rotatieHoek = gameController.getBird().getRotatieHoek() / 3; //  /3 anders bird on steroids 
 
         vogelUp.setRotate(rotatieHoek);

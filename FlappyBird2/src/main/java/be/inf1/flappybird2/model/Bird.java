@@ -1,7 +1,4 @@
 package be.inf1.flappybird2.model;
-
-
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -91,6 +88,7 @@ public class Bird {
         //verandering in y
         dy = y - (y + snelheid);
 
+        // Copilot code
         rotatieHoek = Math.toDegrees(Math.atan2(dy, 1));
     }
 

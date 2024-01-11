@@ -13,18 +13,17 @@ import java.util.List;
 import java.util.Comparator;
 
 public class SpelerGegevens {
-    private  String naam;
+    private String naam;
     private int highScore;
 
-    public SpelerGegevens() { 
+    public SpelerGegevens() {
     }
 
     public String getNaam() {
         return naam;
     }
 
-    public void setNaam(String naam)
-    {
+    public void setNaam(String naam) {
         this.naam = naam;
     }
 
@@ -37,38 +36,41 @@ public class SpelerGegevens {
     }
 
     public void saveData() {
-    
-    Gson gson = new Gson();
 
-    List<SpelerGegevens> spelerGegevensLijst = new ArrayList<>();
-    File file = new File("GegevensSpeler.json");
-    if (file.exists()) {
-        try (FileReader lezen = new FileReader(file)) {
-            Type type = new TypeToken<List<SpelerGegevens>>(){}.getType();
-            spelerGegevensLijst = gson.fromJson(lezen, type);
+        Gson gson = new Gson();
+
+        // Copilot code 
+        List<SpelerGegevens> spelerGegevensLijst = new ArrayList<>();
+        File file = new File("GegevensSpeler.json");
+        if (file.exists()) {
+            try (FileReader lezen = new FileReader(file)) {
+                Type type = new TypeToken<List<SpelerGegevens>>() {
+                }.getType();
+                spelerGegevensLijst = gson.fromJson(lezen, type);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // nieuwe toevoegen
+        spelerGegevensLijst.add(this);
+
+        // sorteren
+        spelerGegevensLijst.sort(Comparator.comparing(SpelerGegevens::getHighScore).reversed());
+
+        // opslaan
+        String json = gson.toJson(spelerGegevensLijst);
+        try (FileWriter schrijven = new FileWriter(file)) {
+            schrijven.write(json);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // nieuwe toevoegen
-    spelerGegevensLijst.add(this);
-
-    // sorteren
-    spelerGegevensLijst.sort(Comparator.comparing(SpelerGegevens::getHighScore).reversed());
-
-    // opslaan
-    String json = gson.toJson(spelerGegevensLijst);
-    try (FileWriter schrijven = new FileWriter(file)) {
-        schrijven.write(json);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}   
-
-    public List<SpelerGegevens> besteSpelers(){
+    public List<SpelerGegevens> besteSpelers() {
         Gson gson = new Gson();
-        Type type = new TypeToken<List<SpelerGegevens>>(){}.getType();
+        Type type = new TypeToken<List<SpelerGegevens>>() {
+        }.getType();
         List<SpelerGegevens> spelerGegevensLijst = new ArrayList<>();
 
         try (FileReader reader = new FileReader("GegevensSpeler.json")) {
@@ -80,9 +82,7 @@ public class SpelerGegevens {
         spelerGegevensLijst.sort(Comparator.comparing(SpelerGegevens::getHighScore).reversed());
 
         return spelerGegevensLijst.subList(0, Math.min(spelerGegevensLijst.size(), 13));
-        
+
     }
 
-
-    
 }

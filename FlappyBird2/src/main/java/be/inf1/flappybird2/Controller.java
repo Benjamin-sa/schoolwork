@@ -39,7 +39,7 @@ public class Controller {
             Pilaar pilaarModel = new Pilaar();
             double x = pilaarModel.berekenBeginPositie(i);
             pilaarModel.setX(x);
-            pilaarModel.setOpening(100);
+            pilaarModel.setOpening(150);
             pilaarModel.setPaneelHoogte(view.getPaneelHoogte());
             pilaarModel.resetOpening(view.getPaneelHoogte());
             pilaren.add(pilaarModel);

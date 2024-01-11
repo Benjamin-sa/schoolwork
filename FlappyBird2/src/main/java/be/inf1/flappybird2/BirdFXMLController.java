@@ -99,7 +99,7 @@ public class BirdFXMLController {
     private ImageView vogelDown;
 
     private Controller gameController;
-    private boolean spatieBalk = true;
+    private boolean spatieBalk = false;
 
     public BirdFXMLController() {
 
@@ -154,6 +154,7 @@ public class BirdFXMLController {
                         gameController.resetGame();
                         gameOver.setVisible(false);
                         paneel.setVisible(true);
+                        spatieBalk = true;
 
                 }
                 paneel.requestFocus();
@@ -164,7 +165,7 @@ public class BirdFXMLController {
         paneel.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.SPACE && spatieBalk) {
+                if (event.getCode() == KeyCode.SPACE && !spatieBalk) {
 
                     if (!gameController.getGameGestart()) {
                         gameController.startGame();
